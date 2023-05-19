@@ -40,9 +40,9 @@ function CompetitionScreen() {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.navBarContainer}>
+      {/* <View style={styles.navBarContainer}>
         <NavBar />
-      </View>
+      </View> */}
     </View>
   );
 }

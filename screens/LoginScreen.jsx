@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity, Image, Alert, ActivityIndicator, ImageBackground } from 'react-native'
 
 
-const LoginScreen = () => {
+const LoginScreen = ( {navigation} ) => {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -61,7 +61,7 @@ const LoginScreen = () => {
             </TouchableOpacity>
 
 
-            <Button title="or SIGN UP" color={'white'}/>
+            <Button onPress={() => navigation.navigate('Register')} title="or SIGN UP" color={'white'}/>
 
         </View>
     ) : <ActivityIndicator animating={loading} size={40}/> }

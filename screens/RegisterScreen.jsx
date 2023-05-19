@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity, Image, Alert, ActivityIndicator, ImageBackground } from 'react-native'
 
 
-const RegisterScreen = () => {
+const RegisterScreen = ( {navigation} ) => {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -70,7 +70,7 @@ const RegisterScreen = () => {
             </TouchableOpacity>
 
 
-            <Button title="or SIGN IN" color={'white'} titleStyle={styles.buttonTitle}/>
+            <Button onPress={() => navigation.navigate('Login')} title="or SIGN IN" color={'white'} titleStyle={styles.buttonTitle}/>
 
         </View>
     ) : <ActivityIndicator animating={loading} size={40}/> }

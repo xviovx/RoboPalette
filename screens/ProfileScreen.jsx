@@ -28,10 +28,9 @@ const ProfileScreen = () => {
   <Text style={styles.competitionsText}>competitions entered</Text>
 </View>
 
-
-      <View style={styles.navBarContainer}>
+      {/* <View style={styles.navBarContainer}>
         <NavBar />
-      </View>
+      </View> */}
     </View>
   )
 }

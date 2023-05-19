@@ -100,9 +100,9 @@ const submit = () => {
 
         </View>
       </ScrollView>
-      <View style={styles.navBarContainer}>
+      {/* <View style={styles.navBarContainer}>
         <NavBar />
-      </View>
+      </View> */}
     </View>
   )
 }

@@ -1,8 +1,10 @@
 import React from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import HomeScreen from '../screens/HomeScreen';
 
 const NavBar = () => {
+
   return (
     <View style={styles.container}>
       <TouchableOpacity>

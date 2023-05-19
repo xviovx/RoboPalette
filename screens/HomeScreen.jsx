@@ -2,6 +2,9 @@ import { View, Text, StyleSheet, SafeAreaView, ScrollView, Image, TouchableOpaci
 import NavBar from '../components/NavBar';
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+const Tab = createBottomTabNavigator();
 
 const HomeScreen = () => {
 
@@ -41,9 +44,9 @@ const HomeScreen = () => {
 
         </View>
       </ScrollView>
-      <View style={styles.navBarContainer}>
+      {/* <View style={styles.navBarContainer}>
         <NavBar />
-      </View>
+      </View> */}
     </View>
   )
 }
