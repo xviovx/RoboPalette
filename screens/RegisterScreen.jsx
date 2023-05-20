@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity, Image, Alert, ActivityIndicator, ImageBackground } from 'react-native'
-
+import { registerNewUser } from '../services/firebaseAuth';
 
 const RegisterScreen = ( {navigation} ) => {
 
@@ -9,6 +9,11 @@ const RegisterScreen = ( {navigation} ) => {
     const [username, setUsername] = useState('')
 
     const [loading, setLoading] = useState(false)
+
+    const registerUser = () => {
+        console.log("registering.....")
+        registerNewUser(username, email, password)
+    }
 
     //function that executes when the user tries to log on
     // const logOn = () => {
@@ -27,9 +32,9 @@ const RegisterScreen = ( {navigation} ) => {
     //     }
     // }
 
-    const signUpContinue = () => {
-        navigation.navigate('Configure')
-    }
+    // const signUpContinue = () => {
+    //     navigation.navigate('Configure')
+    // }
 
   return (
     <ImageBackground source={require('../assets/log_bg.png')} style={styles.background}>
@@ -67,7 +72,7 @@ const RegisterScreen = ( {navigation} ) => {
       
     { !loading ? (
         <View>
-            <TouchableOpacity style={styles.submitButton} onPress={signUpContinue}>
+            <TouchableOpacity style={styles.submitButton} onPress={registerUser}>
                 <View style={styles.buttonContent}>
                     <Text style={styles.submitButtonText}>CONTINUE</Text>
                 </View>

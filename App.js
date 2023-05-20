@@ -17,12 +17,27 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import NavBar from './components/NavBar';
 import HomeTab from './navigators/NavTab';
 import NavTab from './navigators/NavTab';
+import React, { useEffect, useState } from 'react'
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from './firebase';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
 
-const loggedIn = true
+const [loggedIn, setLoggedIn] = useState(false)
+
+useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
+    if(user){
+      setLoggedIn(true)
+    }else {
+      setLoggedIn(false)
+    }
+  })
+
+  return unsubscribe;
+}, [])
 
  return (
    <SafeAreaView style={{ flex: 1 }}>

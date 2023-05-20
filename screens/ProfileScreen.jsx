@@ -2,13 +2,16 @@ import { View, Text, StyleSheet, SafeAreaView, ScrollView, Image, TouchableOpaci
 import NavBar from '../components/NavBar';
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { getCurrentUser, signOutUser } from '../services/firebaseAuth';
 
 const ProfileScreen = ({navigation}) => {
 
-  const handleLogout = () => {
-    // Perform logout actions here
-    // For example, clear user session, navigate to login screen, etc.
-  };
+  // const handleLogout = () => {
+  //   // Perform logout actions here
+  //   // For example, clear user session, navigate to login screen, etc.
+  // };
+
+  const user = getCurrentUser()
 
   const handleEditProfile = () => {
     navigation.navigate('EditProfile'); // Replace 'EditProfile' with your actual screen name
@@ -32,7 +35,7 @@ const ProfileScreen = ({navigation}) => {
         <TouchableOpacity style={styles.editButton} onPress={handleEditProfile}>
             <Ionicons name="create-outline" size={25} color="black" />
           </TouchableOpacity>
-        <Text style={styles.userName}>xviovx</Text>
+        <Text style={styles.userName}>{user.displayName}</Text>
         <Text style={styles.location}>South Africa</Text>
         <Text style={styles.description}>certified proompter 🥸🧑🏻‍💻</Text>
         <View style={styles.linkBreak}></View>
@@ -40,7 +43,7 @@ const ProfileScreen = ({navigation}) => {
         <Text style={styles.competitionsText}>competitions entered</Text>
       </View>
 
-      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+      <TouchableOpacity style={styles.logoutButton} onPress={signOutUser}>
         <Ionicons name="exit-outline" size={25} color="white" />
       </TouchableOpacity>
 

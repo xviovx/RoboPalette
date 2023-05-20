@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity, Image, Alert, ActivityIndicator, ImageBackground } from 'react-native'
 import * as ImagePicker from 'expo-image-picker';
+import { registerNewUser } from '../services/firebaseAuth';
 
 const ConfigureScreen = () => {
 
@@ -12,22 +13,27 @@ const ConfigureScreen = () => {
 
     const [loading, setLoading] = useState(false)
 
-    //function that executes when the user tries to log on
-    const logOn = () => {
-        setLoading(true)
-        if(!email || !password) {
-            Alert.alert("try again", "please fill in your email and password", [
-                {text: 'try again', onPress: () => { setLoading(false) }}
-            ])
-        } else {
-            
-            Alert.alert("You're in!", "Successfully logged in", [
-                {text: 'Thanks', onPress: () => {
-                    setLoading(false)
-                }}
-            ])
-        }
+    const registerUser = () => {
+        console.log("registering.....")
+        registerNewUser(email, password, image, about, location)
     }
+
+    //function that executes when the user tries to log on
+    // const logOn = () => {
+    //     setLoading(true)
+    //     if(!email || !password) {
+    //         Alert.alert("try again", "please fill in your email and password", [
+    //             {text: 'try again', onPress: () => { setLoading(false) }}
+    //         ])
+    //     } else {
+            
+    //         Alert.alert("You're in!", "Successfully logged in", [
+    //             {text: 'Thanks', onPress: () => {
+    //                 setLoading(false)
+    //             }}
+    //         ])
+    //     }
+    // }
 
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -35,11 +41,11 @@ const ConfigureScreen = () => {
             allowsEditing: true,
             aspect: [4, 3],
             quality: 1,
-        });
-
-        if (!result.cancelled) {
-            setImage(result.uri);
-        }
+          });
+          
+          if (!result.canceled) {
+            setImage(result.assets[0].uri);
+          }          
     };
 
   return (
@@ -73,7 +79,7 @@ const ConfigureScreen = () => {
       
     { !loading ? (
         <View>
-            <TouchableOpacity style={styles.submitButton} onPress={logOn}>
+            <TouchableOpacity style={styles.submitButton} onPress={registerUser}>
                 <View style={styles.buttonContent}>
                     <Text style={styles.submitButtonText}>CONFIRM</Text>
                 </View>

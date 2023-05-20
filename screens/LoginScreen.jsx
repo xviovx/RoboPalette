@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity, Image, Alert, ActivityIndicator, ImageBackground } from 'react-native'
+import { signInUser } from '../services/firebaseAuth'
 
 
 const LoginScreen = ( {navigation} ) => {
@@ -10,19 +11,17 @@ const LoginScreen = ( {navigation} ) => {
     const [loading, setLoading] = useState(false)
 
     //function that executes when the user tries to log on
-    const logOn = () => {
-        setLoading(true)
+    const logOn = async () => {
+        // setLoading(true)
         if(!email || !password) {
             Alert.alert("try again", "please fill in your email and password", [
                 {text: 'try again', onPress: () => { setLoading(false) }}
             ])
         } else {
+            await signInUser(email, password)
+            setLoading(false)
+
             
-            Alert.alert("You're in!", "Successfully logged in", [
-                {text: 'Thanks', onPress: () => {
-                    setLoading(false)
-                }}
-            ])
         }
     }
 
