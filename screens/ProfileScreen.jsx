@@ -3,7 +3,16 @@ import NavBar from '../components/NavBar';
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const ProfileScreen = () => {
+const ProfileScreen = ({navigation}) => {
+
+  const handleLogout = () => {
+    // Perform logout actions here
+    // For example, clear user session, navigate to login screen, etc.
+  };
+
+  const handleEditProfile = () => {
+    navigation.navigate('EditProfile'); // Replace 'EditProfile' with your actual screen name
+  };
 
   return (
     <View style={styles.container}>
@@ -17,16 +26,23 @@ const ProfileScreen = () => {
       </View>
      
       <View style={styles.content}>
-  <View style={styles.userImage}>
-    <Image source={require('../assets/user-image.png')} style={styles.userImageStyle}/>
-  </View>
-  <Text style={styles.userName}>xviovx</Text>
-  <Text style={styles.location}>South Africa</Text>
-  <Text style={styles.description}>certified proompter 🥸🧑🏻‍💻</Text>
-  <View style={styles.linkBreak}></View>
-  <Text style={styles.competitionsNumber}>2</Text>
-  <Text style={styles.competitionsText}>competitions entered</Text>
-</View>
+        <View style={styles.userImage}>
+          <Image source={require('../assets/user-image.png')} style={styles.userImageStyle}/>
+        </View>
+        <TouchableOpacity style={styles.editButton} onPress={handleEditProfile}>
+            <Ionicons name="create-outline" size={25} color="black" />
+          </TouchableOpacity>
+        <Text style={styles.userName}>xviovx</Text>
+        <Text style={styles.location}>South Africa</Text>
+        <Text style={styles.description}>certified proompter 🥸🧑🏻‍💻</Text>
+        <View style={styles.linkBreak}></View>
+        <Text style={styles.competitionsNumber}>2</Text>
+        <Text style={styles.competitionsText}>competitions entered</Text>
+      </View>
+
+      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+        <Ionicons name="exit-outline" size={25} color="white" />
+      </TouchableOpacity>
 
       {/* <View style={styles.navBarContainer}>
         <NavBar />
@@ -57,11 +73,6 @@ const styles = StyleSheet.create({
     height: 40,
     width: 40,
     marginRight: 25
-  },
-  textHold: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%'
   },
   content: {
     flex: 1,
@@ -130,5 +141,28 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'white',
   },
-  
+  logoutButton: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: 'red',
+    borderRadius: 5,
+  },
+  logoutButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  editButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    backgroundColor: 'white',
+    borderRadius: 5,
+
+  },
 });

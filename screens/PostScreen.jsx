@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import * as ImagePicker from 'expo-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const PostScreen = () => {
+const PostScreen = ({navigation}) => {
 
   const [image, setImage] = useState(null);
   const [title, setTitle] = useState('');

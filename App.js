@@ -15,7 +15,8 @@ import HomeScreen from './screens/HomeScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import NavBar from './components/NavBar';
-import HomeTab from './navigators/HomeTab';
+import HomeTab from './navigators/NavTab';
+import NavTab from './navigators/NavTab';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,10 +35,15 @@ const loggedIn = true
               <>
               <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
               <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} />
+              <Stack.Screen name="Configure" component={ConfigureScreen} options={{ headerShown: false }} />
               </>
             ): (
               <>
-              <Stack.Screen name="Home" component={HomeTab} />
+              <Stack.Screen name="Nav" component={NavTab} />
+              <Stack.Screen name="EditProfile" component={EditProfile} />
+              <Stack.Screen name="PostInfo" component={PostInfo}/>
+              <Stack.Screen name="CompInd" component={CompIndScreen} />
+              <Stack.Screen name="Enter" component={PostScreen} />
               </>
             )}
         </Stack.Navigator>

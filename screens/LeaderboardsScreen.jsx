@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, Image, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, FlatList } from 'react-native';
 import NavBar from '../components/NavBar';
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -18,6 +18,22 @@ const images = [
 
 const LeaderboardsScreen = () => {
 
+  const handleImagePress = (item) => {
+    // Do something when an image is pressed
+  };
+
+  const renderItem = ({ item, index }) => (
+    <TouchableOpacity onPress={() => handleImagePress(item)}>
+      <View style={styles.imageContainer}>
+        <Image
+          source={item}
+          style={styles.image}
+        />
+        <Text style={styles.imageNumber}>{index + 1}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+
   return (
     <View style={styles.container}>
       <View style={styles.navHeader}>
@@ -28,61 +44,33 @@ const LeaderboardsScreen = () => {
           <Image style={styles.logo} source={require('../assets/logo.png')} />
         </View>
       </View>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <View style={styles.content}>
-          <View style={styles.textHold}>
-            <Text style={styles.comp}>LEADERBOARDS</Text>
-            <Text style={styles.compTwo}>Top 10</Text>
-          </View>
-          <FlatList
-  style={{ alignSelf: 'center', marginTop: 20 }}
-  contentContainerStyle={{ alignItems: 'center' }}
-  numColumns={2}
-  data={images}
-  keyExtractor={(item, index) => index.toString()}
-  renderItem={({ item, index }) => (
-    <TouchableOpacity onPress={() => handleImagePress(item)}>
-      <View style={{ margin: 10, padding: 10, justifyContent: 'center', alignItems: 'center' }}>
-        <Image
-          source={item}
-          style={{ width: 150, height: 150, borderRadius: 10 }}
-        />
-        <Text style={styles.imageNumber}>{index + 1}</Text>
-      </View>
-    </TouchableOpacity>
-  )}
-/>
-
-
-
+      <View style={styles.content}>
+        <View style={styles.textHold}>
+          <Text style={styles.comp}>LEADERBOARDS</Text>
+          <Text style={styles.compTwo}>Top 10</Text>
         </View>
-      </ScrollView>
+        <FlatList
+          style={styles.flatList}
+          contentContainerStyle={styles.flatListContent}
+          numColumns={2}
+          data={images}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={renderItem}
+        />
+      </View>
       {/* <View style={styles.navBarContainer}>
         <NavBar />
       </View> */}
     </View>
-  )
-}
+  );
+};
 
-export default LeaderboardsScreen
+export default LeaderboardsScreen;
 
 const styles = StyleSheet.create({
   container: {
-    height: '100%',
+    flex: 1,
     backgroundColor: '#131312',
-    justifyContent: 'space-between',
-  },
-  imageNumber: {
-    position: 'absolute',
-    bottom: 5,
-    right: 20,
-    color: 'white',
-    fontSize: 48,
-    fontWeight: 'bold',
-  },
-    
-  headings: {
-    color: 'white',
   },
   navHeader: {
     height: '10%',
@@ -99,52 +87,52 @@ const styles = StyleSheet.create({
     width: 40,
     marginRight: 25
   },
+  content: {
+    flex: 1,
+    paddingHorizontal: 10,
+    marginTop: 20,
+  },
   textHold: {
     justifyContent: 'center',
     alignItems: 'center',
-    width: '100%'
+    marginBottom: 20,
+    marginTop: 20,
   },
   comp: {
     color: 'white',
     fontSize: 20,
-    marginBottom: 20,
-    marginTop: 20,
     fontWeight: 'bold',
-    letterSpacing: 3
+    letterSpacing: 3,
   },
   compTwo: {
     color: 'white',
     fontSize: 16,
-    marginBottom: 10
+    marginBottom: 10,
+    marginTop: 20
   },
-  content: {
+  flatList: {
     flex: 1,
-    justifyContent: '',
-    alignItems: 'flex-start',
-    marginHorizontal: 0,
-    marginTop: 20,
   },
-  buttons: {
-    width: '100%',
-    flexDirection: 'row',
+  flatListContent: {
+    alignItems: 'center',
+  },
+  imageContainer: {
+    margin: 10,
+    padding: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  button: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    
-  
+  image: {
+    width: 150,
+    height: 150,
+    borderRadius: 10,
   },
-  buttonText:{
-    fontSize :16,
-    fontWeight:'bold',
-    textAlign:'center'
+  imageNumber: {
+    position: 'absolute',
+    bottom: 5,
+    right: 20,
+    color: 'white',
+    fontSize: 48,
+    fontWeight: 'bold',
   },
-  navBarContainer: {
-    alignSelf: 'stretch',
-    marginBottom: 0,
-    width: '100%'
-  }
 });

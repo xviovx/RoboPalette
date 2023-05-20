@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import * as ImagePicker from 'expo-image-picker';
 
-const EditProfile = () => {
+const EditProfile = ({navigation}) => {
 
   const handleImagePress = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();

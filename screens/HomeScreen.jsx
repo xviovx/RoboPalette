@@ -6,7 +6,11 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 const Tab = createBottomTabNavigator();
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
+
+  const handlePostPress = () => {
+    navigation.navigate('PostInfo')
+  };
 
   return (
     <View style={styles.container}>
@@ -20,28 +24,27 @@ const HomeScreen = () => {
       </View>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.content}>
-        <View style={styles.post}>
-  <View style={styles.postHeader}>
-    <Image style={styles.userImage} source={require('../assets/user-image.png')} />
-    <View style={styles.userInfo}>
-      <Text style={styles.userName}>xviovx</Text>
-      <Text style={styles.postTitle}>Impressionist piece generated with Midjourney</Text>
-    </View>
-  </View>
-  <Image style={styles.postImage} source={require('../assets/imageMisty.png')} />
-  <View style={styles.postStats}>
-    <View style={styles.likesContainer}>
-      <View style={styles.iconsCon}>
-      <Ionicons name="heart" size={16} color="white" />
-      <Text style={styles.statsText}>123</Text>
-      <Ionicons name="eye" size={16} color="white" />
-      <Text style={styles.statsText}>545</Text>
-      </View>
-      <Text style={styles.timePosted}>2 hours ago</Text>
-    </View>
-  </View>
-</View>
-
+          <TouchableOpacity onPress={handlePostPress} style={styles.post}>
+            <View style={styles.postHeader}>
+              <Image style={styles.userImage} source={require('../assets/user-image.png')} />
+              <View style={styles.userInfo}>
+                <Text style={styles.userName}>xviovx</Text>
+                <Text style={styles.postTitle}>Impressionist piece generated with Midjourney</Text>
+              </View>
+            </View>
+            <Image style={styles.postImage} source={require('../assets/imageMisty.png')} />
+            <View style={styles.postStats}>
+              <View style={styles.likesContainer}>
+                <View style={styles.iconsCon}>
+                  <Ionicons name="heart" size={16} color="white" />
+                  <Text style={styles.statsText}>123</Text>
+                  <Ionicons name="eye" size={16} color="white" />
+                  <Text style={styles.statsText}>545</Text>
+                </View>
+                <Text style={styles.timePosted}>2 hours ago</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
         </View>
       </ScrollView>
       {/* <View style={styles.navBarContainer}>
@@ -51,7 +54,7 @@ const HomeScreen = () => {
   )
 }
 
-export default HomeScreen
+export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {

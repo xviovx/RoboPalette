@@ -11,20 +11,24 @@ const RegisterScreen = ( {navigation} ) => {
     const [loading, setLoading] = useState(false)
 
     //function that executes when the user tries to log on
-    const logOn = () => {
-        setLoading(true)
-        if(!email || !password) {
-            Alert.alert("try again", "please fill in your email and password", [
-                {text: 'try again', onPress: () => { setLoading(false) }}
-            ])
-        } else {
+    // const logOn = () => {
+    //     setLoading(true)
+    //     if(!email || !password) {
+    //         Alert.alert("try again", "please fill in your email and password", [
+    //             {text: 'try again', onPress: () => { setLoading(false) }}
+    //         ])
+    //     } else {
             
-            Alert.alert("You're in!", "Successfully logged in", [
-                {text: 'Thanks', onPress: () => {
-                    setLoading(false)
-                }}
-            ])
-        }
+    //         Alert.alert("You're in!", "Successfully logged in", [
+    //             {text: 'Thanks', onPress: () => {
+    //                 setLoading(false)
+    //             }}
+    //         ])
+    //     }
+    // }
+
+    const signUpContinue = () => {
+        navigation.navigate('Configure')
     }
 
   return (
@@ -63,7 +67,7 @@ const RegisterScreen = ( {navigation} ) => {
       
     { !loading ? (
         <View>
-            <TouchableOpacity style={styles.submitButton} onPress={logOn}>
+            <TouchableOpacity style={styles.submitButton} onPress={signUpContinue}>
                 <View style={styles.buttonContent}>
                     <Text style={styles.submitButtonText}>CONTINUE</Text>
                 </View>

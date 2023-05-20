@@ -12,16 +12,28 @@ import PostScreen from '../screens/PostScreen'
 
 const Tab = createBottomTabNavigator();
 
-const HomeTab = () => {
+const NavTab = () => {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+  screenOptions={{
+    tabBarStyle: {
+      backgroundColor: 'black',
+      height: 80,
+      paddingBottom: 20,
+      paddingTop: 20
+    },
+    tabBarLabel: () => null,
+    headerShown: false
+    
+  }}
+>
 <Tab.Screen
     name="Home"
     component={HomeScreen}
     options={{
       tabBarIcon: ({ color, size }) => (
-        <Ionicons name="home-outline" color={color} size={size} />
-      ),
+        <Ionicons name="home-outline" color={color} size={25 } />
+      )
     }}
   />
   <Tab.Screen
@@ -29,7 +41,7 @@ const HomeTab = () => {
     component={CompetitionScreen}
     options={{
       tabBarIcon: ({ color, size }) => (
-        <Ionicons name="trophy-outline" color={color} size={25} />
+        <Ionicons name="trophy-outline" color={color} size={25 } />
       ),
     }}
   />
@@ -38,7 +50,7 @@ const HomeTab = () => {
     component={PostScreen}
     options={{
       tabBarIcon: ({ color, size }) => (
-        <Ionicons name="add-outline" color={color} size={25} />
+        <Ionicons name="add-outline" color={color} size={35} />
       ),
     }}
   />
@@ -47,7 +59,7 @@ const HomeTab = () => {
     component={LeaderboardsScreen}
     options={{
       tabBarIcon: ({ color, size }) => (
-        <Ionicons name="bar-chart-outline" color={color} size={25} />
+        <Ionicons name="bar-chart-outline" color={color} size={25 } />
       ),
     }}
   />
@@ -56,7 +68,7 @@ const HomeTab = () => {
     component={ProfileScreen}
     options={{
       tabBarIcon: ({ color, size }) => (
-        <Ionicons name="person-outline" color={color} size={25} />
+        <Ionicons name="person-outline" color={color} size={25 } />
       ),
     }}
   />
@@ -64,6 +76,6 @@ const HomeTab = () => {
   )
 }
 
-export default HomeTab
+export default NavTab
 
 const styles = StyleSheet.create({})

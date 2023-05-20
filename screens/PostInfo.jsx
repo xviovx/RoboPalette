@@ -3,8 +3,9 @@ import NavBar from '../components/NavBar';
 import React, { useState } from 'react'
 import * as ImagePicker from 'expo-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-const PostInfo = () => {
+const PostInfo = ({navigation}) => {
 
   const [image, setImage] = useState(null);
   const [title, setTitle] = useState('the temp title');
@@ -65,9 +66,9 @@ const submit = () => {
     </TouchableOpacity>
   </View>
 </View>
-      <View style={styles.navBarContainer}>
+      {/* <View style={styles.navBarContainer}>
         <NavBar />
-      </View>
+      </View> */}
     </View>
   )
 }
