@@ -1,28 +1,18 @@
 import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, FlatList } from 'react-native';
-import NavBar from '../components/NavBar';
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const images = [
-  require('../assets/image1.png'),
-  require('../assets/image2.png'),
-  require('../assets/image3.png'),
-  require('../assets/image4.png'),
-  require('../assets/image5.png'),
-  require('../assets/image6.png'),
-  require('../assets/image7.png'),
-  require('../assets/image8.png'),
-  require('../assets/image9.png'),
-  require('../assets/image10.png'),
-  require('../assets/image11.png'),
-  require('../assets/image12.png'),
-  require('../assets/image13.png')
+  require('../../assets/image1.png'),
+  require('../../assets/image2.png'),
+  require('../../assets/image3.png'),
+  require('../../assets/image4.png'),
 ];
 
-const CompIndScreen = ({navigation}) => {
+const Surrealism = ({navigation}) => {
 
   const enterCompetition = () => {
-    navigation.navigate('Enter')
+    navigation.navigate('Enter', {category: "Surrealism"})
   }
 
   return (
@@ -32,13 +22,13 @@ const CompIndScreen = ({navigation}) => {
           <Ionicons name="chevron-back-outline" size={25} color='white'/>
         </TouchableOpacity>
         <View style={{ flex: 1, alignItems: 'center' }}>
-          <Image style={styles.logo} source={require('../assets/logo.png')} />
+          <Image style={styles.logo} source={require('../../assets/logo.png')} />
         </View>
       </View>
       <View style={styles.content}>
         <View style={styles.textHold}>
-          <Text style={styles.comp}>COMP TITLE</Text>
-          <Text style={styles.compTwo}>CHOOSE A COMPETITION</Text>
+          <Text style={styles.comp}>SURREALISM</Text>
+          {/* <Text style={styles.compTwo}></Text> */}
         </View>
         <View style={styles.buttons}>
           <TouchableOpacity style={[styles.button, { backgroundColor: '#007AFF' }]} onPress={() => enterCompetition()}>
@@ -73,7 +63,7 @@ const CompIndScreen = ({navigation}) => {
   )
 }
 
-export default CompIndScreen;
+export default Surrealism;
 
 const styles = StyleSheet.create({
   container: {

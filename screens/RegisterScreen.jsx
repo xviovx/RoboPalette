@@ -15,22 +15,21 @@ const RegisterScreen = ( {navigation} ) => {
         registerNewUser(username, email, password)
     }
 
-    //function that executes when the user tries to log on
-    // const logOn = () => {
-    //     setLoading(true)
-    //     if(!email || !password) {
-    //         Alert.alert("try again", "please fill in your email and password", [
-    //             {text: 'try again', onPress: () => { setLoading(false) }}
-    //         ])
-    //     } else {
+    const registerLoad = () => {
+        setLoading(true)
+        if(!email || !password || !username) {
+            Alert.alert("try again", "please fill in all your details", [
+                {text: 'try again', onPress: () => { setLoading(false) }}
+            ])
+        } else {
             
-    //         Alert.alert("You're in!", "Successfully logged in", [
-    //             {text: 'Thanks', onPress: () => {
-    //                 setLoading(false)
-    //             }}
-    //         ])
-    //     }
-    // }
+            Alert.alert("You're in!", "Successfully created account", [
+                {text: 'Ok', onPress: () => {
+                    setLoading(false)
+                }}
+            ])
+        }
+    }
 
     // const signUpContinue = () => {
     //     navigation.navigate('Configure')
@@ -72,12 +71,11 @@ const RegisterScreen = ( {navigation} ) => {
       
     { !loading ? (
         <View>
-            <TouchableOpacity style={styles.submitButton} onPress={registerUser}>
+            <TouchableOpacity style={styles.submitButton} onPress={() => { registerLoad(); registerUser(); }}>
                 <View style={styles.buttonContent}>
                     <Text style={styles.submitButtonText}>CONTINUE</Text>
-                </View>
+                 </View>
             </TouchableOpacity>
-
 
             <Button onPress={() => navigation.navigate('Login')} title="or SIGN IN" color={'white'} titleStyle={styles.buttonTitle}/>
 

@@ -3,8 +3,28 @@ import { View, Text, StyleSheet, SafeAreaView, ScrollView, Image, TouchableOpaci
 import NavBar from '../components/NavBar';
 
 function CompetitionScreen({navigation}) {
-  const EnterComp = () => {
-    navigation.navigate('CompInd')
+  const EnterImp = () => {
+    navigation.navigate('Impressionism')
+  }
+
+  const EnterMin = () => {
+    navigation.navigate("Minimalism")
+  }
+
+  const EnterPop = () => {
+    navigation.navigate("PopArt")
+  }
+
+  const EnterSur = () => {
+    navigation.navigate("Surrealism")
+  }
+
+  const EnterReal = () => {
+    navigation.navigate("Realism")
+  }
+
+  const EnterCub = () => {
+    navigation.navigate("Cubism")
   }
 
   return (
@@ -18,27 +38,27 @@ function CompetitionScreen({navigation}) {
           <Text style={styles.compTwo}>CHOOSE A COMPETITION</Text>
         </View>
         <View style={styles.tileContainer}>
-          <TouchableOpacity style={styles.tile} onPress={EnterComp}>
+          <TouchableOpacity style={styles.tile} onPress={EnterImp}>
             <Image source={require("../assets/tile1.png")} style={styles.tileImage} />
             <Text style={styles.tileText}>Impressionism</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.tile} onPress={EnterComp}>
+          <TouchableOpacity style={styles.tile} onPress={EnterMin}>
             <Image source={require("../assets/tile2.png")} style={styles.tileImage} />
             <Text style={styles.tileText}>Minimalism</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.tile} onPress={EnterComp}>
+          <TouchableOpacity style={styles.tile} onPress={EnterPop}>
             <Image source={require("../assets/tile3.png")} style={styles.tileImage} />
             <Text style={styles.tileText}>Pop Art</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.tile} onPress={EnterComp}>
+          <TouchableOpacity style={styles.tile} onPress={EnterSur}>
             <Image source={require("../assets/tile4.png")} style={styles.tileImage} />
             <Text style={styles.tileText}>Surrealism</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.tile} onPress={EnterComp}>
+          <TouchableOpacity style={styles.tile} onPress={EnterReal}>
             <Image source={require("../assets/tile5.png")} style={styles.tileImage} />
             <Text style={styles.tileText}>Realism</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.tile} onPress={EnterComp}>
+          <TouchableOpacity style={styles.tile} onPress={EnterCub}>
             <Image source={require("../assets/tile6.png")} style={styles.tileImage} />
             <Text style={styles.tileText}>Cubism</Text>
           </TouchableOpacity>

@@ -3,14 +3,50 @@ import NavBar from '../components/NavBar';
 import React, { useState } from 'react'
 import * as ImagePicker from 'expo-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { getCurrentUser } from '../services/firebaseAuth';
+import { addPostToCollection } from '../services/firebaseDb';
+import { serverTimestamp } from 'firebase/firestore';
 
-const PostScreen = ({navigation}) => {
+const PostScreen = ({navigation, route}) => {
 
   const [image, setImage] = useState(null);
   const [title, setTitle] = useState('');
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState(route.params?.category || '');
   const [generator, setGenerator] = useState('');
   const [prompt, setPrompt] = useState('');
+  const [loading, setLoading] = useState(false)
+
+const createPost = async() => {
+  setLoading(true)
+
+  if(title && category && generator && prompt){
+    var creatorInfo = getCurrentUser()
+
+    var post = {
+      image,
+      title,
+      category,
+      generator,
+      prompt,
+      creator: creatorInfo.displayName,
+      userId: creatorInfo.uid,
+      date: serverTimestamp(), 
+    }
+
+    const success = await addPostToCollection(post)
+    if(success){ 
+      Alert.alert("Posted successfully!")
+      setLoading(false)
+      navigation.navigate("Home")
+    } else {
+      console.log("Error posting")
+      Alert.alert("Failed to post!", "OK")
+      setLoading(false)
+    }
+  } else {
+    Alert.alert("Woops!", "Please complete all necessary fields")
+  }
+}
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -25,19 +61,19 @@ const PostScreen = ({navigation}) => {
     }
 };
 
-const submit = () => {
-  if(!email || !password) {
-      Alert.alert("try again", "please fill in your email and password", [
-          {text: 'try again'}
-      ])
-  } else {
+// const submit = () => {
+//   if(!email || !password) {
+//       Alert.alert("try again", "please fill in your email and password", [
+//           {text: 'try again'}
+//       ])
+//   } else {
       
-      Alert.alert("You're in!", "Successfully logged in", [
-          {text: 'Thanks', onPress: () => {
-          }}
-      ])
-  }
-}
+//       Alert.alert("You're in!", "Successfully logged in", [
+//           {text: 'Thanks', onPress: () => {
+//           }}
+//       ])
+//   }
+// }
 
   return (
     <View style={styles.container}>
@@ -92,7 +128,7 @@ const submit = () => {
       defaultValue={prompt}
       onChangeText={newValue => setPrompt(newValue)}/>
 
-            <TouchableOpacity style={styles.submitButton} onPress={submit}>
+            <TouchableOpacity style={styles.submitButton} onPress={createPost}>
                 <View style={styles.buttonContent}>
                     <Text style={styles.submitButtonText}>CONFIRM</Text>
                 </View>

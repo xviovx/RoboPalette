@@ -11,19 +11,27 @@ const LoginScreen = ( {navigation} ) => {
     const [loading, setLoading] = useState(false)
 
     //function that executes when the user tries to log on
-    const logOn = async () => {
-        // setLoading(true)
-        if(!email || !password) {
-            Alert.alert("try again", "please fill in your email and password", [
-                {text: 'try again', onPress: () => { setLoading(false) }}
+    const logLoad = async () => {
+        if (!email || !password) {
+            Alert.alert("Try again", "Please complete all fields", [
+                {text: 'Try again', onPress: () => { setLoading(false) }}
             ])
         } else {
-            await signInUser(email, password)
+            const signInResult = await signInUser(email, password)
             setLoading(false)
-
-            
+            if (signInResult.error) {
+                // Sign in failed
+                Alert.alert("Error", "Failed to sign in. Please check your email and password.", [
+                    {text: 'Ok', onPress: () => { setLoading(false) }}
+                ])
+            } else {
+                // Sign in was successful
+                Alert.alert("You're in!", "Signed in successfully!", [
+                    {text: 'Ok', onPress: () => { setLoading(false) }}
+                ])
+            }
         }
-    }
+    }        
 
   return (
     <ImageBackground source={require('../assets/log_bg.png')} style={styles.background}>
@@ -53,7 +61,7 @@ const LoginScreen = ( {navigation} ) => {
       
     { !loading ? (
         <View>
-            <TouchableOpacity style={styles.submitButton} onPress={logOn}>
+            <TouchableOpacity style={styles.submitButton} onPress={logLoad}>
                 <View style={styles.buttonContent}>
                     <Text style={styles.submitButtonText}>LET'S GO!</Text>
                 </View>

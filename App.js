@@ -5,7 +5,6 @@ import RegisterScreen from './screens/RegisterScreen';
 import ConfigureScreen from './screens/ConfigureScreen';
 import * as Font from 'expo-font';
 import CompEntScreen from './screens/CompEntScreen';
-import CompIndScreen from './screens/CompIndScreen';
 import PostScreen from './screens/PostScreen';
 import PostInfo from './screens/PostInfo';
 import LeaderboardsScreen from './screens/LeaderboardsScreen';
@@ -20,6 +19,13 @@ import NavTab from './navigators/NavTab';
 import React, { useEffect, useState } from 'react'
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
+import Impressionism from './screens/Competitions/Impressionism';
+import Minimalism from './screens/Competitions/Minimalism';
+import PopArt from './screens/Competitions/PopArt';
+import Surrealism from './screens/Competitions/Surrealism';
+import Realism from './screens/Competitions/Realism';
+import Cubism from './screens/Competitions/Cubism';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -57,7 +63,12 @@ useEffect(() => {
               <Stack.Screen name="Nav" component={NavTab} />
               <Stack.Screen name="EditProfile" component={EditProfile} />
               <Stack.Screen name="PostInfo" component={PostInfo}/>
-              <Stack.Screen name="CompInd" component={CompIndScreen} />
+              <Stack.Screen name="Impressionism" component={Impressionism} />
+              <Stack.Screen name="Minimalism" component={Minimalism} />
+              <Stack.Screen name="PopArt" component={PopArt} />
+              <Stack.Screen name="Surrealism" component={Surrealism} />
+              <Stack.Screen name="Realism" component={Realism} />
+              <Stack.Screen name="Cubism" component={Cubism} />
               <Stack.Screen name="Enter" component={PostScreen} />
               </>
             )}

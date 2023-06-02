@@ -1,15 +1,18 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
 import { auth } from "../firebase";
 import { Alert } from "react-native";
+import { createUserInDb } from "./firebaseDb";
 
 export const registerNewUser = (username, email, password,) => {
     createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
+    .then(async(userCredential) => {
         const user = userCredential.user;
         console.log(user + " just registered!")
 
         updateAuthProfile(username)
-        //atodo: create user in our db
+        
+        await createUserInDb(username, email, user.uid)
+
     })
     .catch((error) => {
         const errorCode = error.code;
@@ -26,14 +29,14 @@ export const signInUser = async (email, password) => {
         console.log(user+ "just logged in")
 
         Alert.alert("You're in!", "Successfully logged in", [
-            {text: 'Thanks', onPress: () => {}}
+            {text: 'Ok', onPress: () => {}}
         ])
     })
     .catch((error) => {
         const errorCode = error.code;
         const errorMessage =error.message;
 
-        Alert.alert("Oops!", errorMessage, [
+        Alert.alert("Oops!", "Incorrect details!", [
             {text: 'Try again', onPress: () => {}}
         ])
     })
@@ -56,6 +59,7 @@ const updateAuthProfile = (username) => {
     updateProfile(auth.currentUser, {
         displayName: username, photoURL: "/"
     }).then(() => {
+
 
     }).catch((error) => {
 
