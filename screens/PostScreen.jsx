@@ -16,6 +16,8 @@ const PostScreen = ({navigation, route}) => {
   const [prompt, setPrompt] = useState('');
   const [loading, setLoading] = useState(false)
 
+  const [uploadButtonText, setUploadButtonText] = useState('Upload Image');
+
 const createPost = async() => {
   setLoading(true)
 
@@ -48,17 +50,19 @@ const createPost = async() => {
   }
 }
 
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-    });
+const pickImage = async () => {
+  let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+  });
 
-    if (!result.cancelled) {
-        setImage(result.uri);
-    }
+  if (!result.canceled && result.assets && result.assets.length > 0) {
+    setImage(result.assets[0].uri);
+    // Once image is selected, change the text
+    setUploadButtonText('Image selected!');
+  }  
 };
 
 // const submit = () => {
@@ -92,7 +96,7 @@ const createPost = async() => {
           </View>
 
           <TouchableOpacity style={styles.uploadButton} onPress={pickImage}>
-            <Text style={styles.uploadButtonText}>Upload Image</Text>
+            <Text style={styles.uploadButtonText}>{uploadButtonText}</Text>
           </TouchableOpacity>
           {image && <Image source={{ uri: image }} style={styles.image} />}
 

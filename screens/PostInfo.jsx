@@ -1,11 +1,13 @@
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, Image, TouchableOpacity, FlatList, Alert, ActivityIndicator, ImageBackground, TextInput } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, ScrollView, Image, TouchableOpacity, FlatList, Alert, ActivityIndicator, ImageBackground, TextInput, useRoute, Modal, Button } from 'react-native';
 import NavBar from '../components/NavBar';
 import React, { useState } from 'react'
 import * as ImagePicker from 'expo-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { getCurrentUser } from '../services/firebaseAuth';
+import { deletePostFromCollection } from '../services/firebaseDb';
 
-const PostInfo = ({navigation}) => {
+const PostInfo = ({navigation, route}) => {
 
   const [image, setImage] = useState(null);
   const [title, setTitle] = useState('the temp title');
@@ -15,32 +17,30 @@ const PostInfo = ({navigation}) => {
 
   const imagePath = '../assets/imageMisty.png';
 
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-    });
+  const [modalVisible, setModalVisible] = useState(false); // State to control the visibility of the modal
 
-    if (!result.cancelled) {
-        setImage(result.uri);
-    }
-};
+  // Access the post object from route.params
+  const { post } = route.params;
 
-const submit = () => {
-  if(!email || !password) {
-      Alert.alert("try again", "please fill in your email and password", [
-          {text: 'try again'}
-      ])
-  } else {
-      
-      Alert.alert("You're in!", "Successfully logged in", [
-          {text: 'Thanks', onPress: () => {
-          }}
-      ])
+  const deletePost = () => {
+    // Open the modal when deletePost is called
+    setModalVisible(true);
   }
+
+  const handleDeleteConfirm = async () => {
+    const result = await deletePostFromCollection(post.id);
+    if(result) {
+        // Navigate back or to another screen after successful deletion
+        navigation.goBack();
+        setModalVisible(false);
+    } else {
+        // Handle error here
+    }
 }
+
+  const handleDeleteCancel = () => {
+
+  }
 
   return (
     <View style={styles.container}>
@@ -53,22 +53,47 @@ const submit = () => {
         </View>
       </View>
       <View style={styles.content}>
-  <Image style={{ width: '100%', height: 200 }} source={require(imagePath)} />
-  <Text style={[styles.headings, { marginTop: 20, fontSize: 32, fontStyle: 'italic'}]}>{title}</Text>
-  <Text style={[styles.headings, { marginTop: 25, fontWeight: 'bold'}]}>Category: <Text style={{fontWeight: 'normal'}}>Impressionism</Text></Text>
-  <Text style={[styles.headings, { marginTop: 25, fontWeight: 'bold'}]}>Generator: <Text style={{fontWeight: 'normal'}}>Midjourney</Text></Text>
-  <Text style={[styles.headings, { marginTop: 25, fontWeight: 'bold'}]}>Prompt: <Text style={{fontWeight: 'normal'}}>Impressionsim piece of forest with a faraway-looking path/ fairy tales --ar 6:6 --upbeta --q 2 --v 5</Text></Text>
-  <View style={{ marginTop: 30, alignItems: 'center' }}>
-    <TouchableOpacity onPress={() => navigation.navigate('UserProfile', { userId: 'xviovx' })}>
-      <Text style={[styles.headings]}>
-        By <Text style={{ textDecorationLine: 'underline', fontWeight: 'bold' }}>xviovx</Text>
-      </Text>
-    </TouchableOpacity>
-  </View>
-</View>
-      {/* <View style={styles.navBarContainer}>
-        <NavBar />
-      </View> */}
+        <Image style={{ width: '100%', height: 200 }} source={{uri: post.image}} />
+        <Text style={[styles.headings, { marginTop: 20, fontSize: 32, fontStyle: 'italic'}]}>{post.title}</Text>
+        <Text style={[styles.headings, { marginTop: 25, fontWeight: 'bold'}]}>Category: <Text style={{fontWeight: 'normal'}}>{post.category}</Text></Text>
+        <Text style={[styles.headings, { marginTop: 25, fontWeight: 'bold'}]}>Generator: <Text style={{fontWeight: 'normal'}}>{post.generator}</Text></Text>
+        <Text style={[styles.headings, { marginTop: 25, fontWeight: 'bold'}]}>Prompt: <Text style={{fontWeight: 'normal'}}>{post.prompt}</Text></Text>
+        <View style={{ marginTop: 30, alignItems: 'center' }}>
+          <TouchableOpacity onPress={() => navigation.navigate('UserProfile', { userId: 'xviovx' })}>
+            <Text style={[styles.headings]}>
+              By <Text style={{ textDecorationLine: 'underline', fontWeight: 'bold' }}>{post.creator}</Text>
+            </Text>
+          </TouchableOpacity>
+        </View>
+        {getCurrentUser().uid == post.userId ? (
+          <TouchableOpacity style={styles.deleteButton} onPress={deletePost}>
+            <Text style={styles.deleteButtonText}>Delete</Text>
+          </TouchableOpacity>
+        ) : null}
+        <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Are you sure you want to delete your post?</Text>
+            <View style={styles.modalButtons}>
+              <TouchableOpacity onPress={handleDeleteConfirm} style={styles.modalButton}>
+                <Text style={styles.buttonText}>Yes</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleDeleteCancel} style={styles.modalButton}>
+                <Text style={styles.buttonText}>No</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+      
+    </View>
     </View>
   )
 }
@@ -195,5 +220,56 @@ uploadButtonText: {
         fontSize: 16,
         textAlign: 'center',
         textAlignVertical: 'center' // add this line
-      }
+      },
+      centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+      },
+      modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+      },
+      modalButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 20,
+      },
+      modalButton: {
+        flex: 1,
+        marginHorizontal: 5,
+        backgroundColor: '#841584',
+        borderRadius: 5,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        alignItems: 'center',
+      },
+      buttonText: {
+        color: 'white',
+        fontSize: 16,
+      },
+      deleteButton: {
+        marginTop: 130,
+        backgroundColor: 'red',
+        padding: 15,
+        borderRadius: 10,
+        width: '100%'
+      },
+      deleteButtonText: {
+        color: 'white',
+        textAlign: 'center',
+        fontSize: 20,
+      },
 });

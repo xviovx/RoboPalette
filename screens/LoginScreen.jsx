@@ -12,26 +12,33 @@ const LoginScreen = ( {navigation} ) => {
 
     //function that executes when the user tries to log on
     const logLoad = async () => {
-        if (!email || !password) {
-            Alert.alert("Try again", "Please complete all fields", [
-                {text: 'Try again', onPress: () => { setLoading(false) }}
-            ])
-        } else {
-            const signInResult = await signInUser(email, password)
-            setLoading(false)
-            if (signInResult.error) {
-                // Sign in failed
-                Alert.alert("Error", "Failed to sign in. Please check your email and password.", [
-                    {text: 'Ok', onPress: () => { setLoading(false) }}
+        setLoading(true); // Start loading
+        try {
+            if (!email || !password) {
+                Alert.alert("Try again", "Please complete all fields", [
+                    {text: 'Try again'}
                 ])
             } else {
-                // Sign in was successful
-                Alert.alert("You're in!", "Signed in successfully!", [
-                    {text: 'Ok', onPress: () => { setLoading(false) }}
-                ])
+                const signInResult = await signInUser(email, password)
+                if (signInResult && signInResult.error) {
+                    // Sign in failed
+                    Alert.alert("Error", "Failed to sign in. Please check your email and password.", [
+                        {text: 'Ok'}
+                    ])
+                } else {
+                    // Sign in was successful
+                    // Alert.alert("You're in!", "Signed in successfully!", [
+                    //     {text: 'Ok'}
+                    // ])
+                }
             }
+        } catch (e) {
+            // Handle error during signInUser
+            console.log("An error occurred during sign in: ", e);
+        } finally {
+            setLoading(false); // Stop loading
         }
-    }        
+    }         
 
   return (
     <ImageBackground source={require('../assets/log_bg.png')} style={styles.background}>

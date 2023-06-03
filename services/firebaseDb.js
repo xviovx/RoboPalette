@@ -1,4 +1,4 @@
-import { Timestamp, addDoc, doc, getDoc, getDocs, orderBy, query, setDoc } from "firebase/firestore"
+import { Timestamp, addDoc, deleteDoc, doc, getDoc, getDocs, orderBy, query, setDoc } from "firebase/firestore"
 import { collection} from "firebase/firestore";
 import { db } from "../firebase";
 
@@ -30,7 +30,7 @@ export const addPostToCollection = async (post) => {
         console.log("something fucked out: " + e)
     }
 }
-
+//03:22:33 -> no index created for query error
 export const getAllPostsFromCollection = async () => {
     try {
         var posts = []
@@ -50,6 +50,17 @@ export const getAllPostsFromCollection = async () => {
     } catch (e) {
         console.log("something went wrong: " + e)
         return []
+    }
+}
+
+export const deletePostFromCollection = async (postId) => {
+    try {
+        await deleteDoc(doc(db, "posts", postId));
+        console.log("Post deleted successfully!")
+        return true;
+    } catch (e) {
+        console.log("Something went wrong: " + e)
+        return false;
     }
 }
 

@@ -1,0 +1,2 @@
+- A page (accessible from my profile) that shows the things the user has posted
+^ and/or add it to home page (my feed// my posts)

@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, error } from "firebase/auth";
 import { auth } from "../firebase";
 import { Alert } from "react-native";
 import { createUserInDb } from "./firebaseDb";

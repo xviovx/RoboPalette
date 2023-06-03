@@ -1,55 +1,101 @@
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, Image, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, ScrollView, Image, TouchableOpacity, FlatList, RefreshControl } from 'react-native';
 import NavBar from '../components/NavBar';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getAllPostsFromCollection } from '../services/firebaseDb';
+import { useFocusEffect } from '@react-navigation/native';
+import { getCurrentUser } from '../services/firebaseAuth';
 
 const Tab = createBottomTabNavigator();
 
 const HomeScreen = ({navigation}) => {
 
-  const handlePostPress = () => {
-    navigation.navigate('PostInfo')
-  };
+  const [feedPosts, setFeedPosts] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchPosts = async () => {
+        const posts = await getAllImpPosts();
+        setFeedPosts(posts);
+      };
+  
+      fetchPosts();
+  
+      // Return a cleanup function to be called when the component is unmounted or unfocused.
+      return () => {
+        //clean when not viewing the screen
+      };
+    }, [])
+  );
+  
+
+  //doesn't do that lol
+//   useEffect(() => {
+//     const fetchPosts = async () => {
+//         const posts = await getAllImpPosts();
+//         setImpPost(posts);
+//     }
+
+//     fetchPosts();
+// }, []);
+
+const getAllImpPosts = async () => {
+  const userId = getCurrentUser().uid;
+  // Check if the "Add to Feed" button has been selected
+  const addToFeed = await AsyncStorage.getItem('@addToFeed:' + userId);
+  if (addToFeed === 'ADDED') {
+    setRefreshing(true)
+    const allPosts = await getAllPostsFromCollection();
+    const feedPosts = allPosts.filter(post => post.category === "Impressionism");
+    setRefreshing(false)
+    return feedPosts;
+  } else {
+    // If the "Add to Feed" button has not been selected, return an empty array
+    return [];
+  }
+}
+
+  // This is the new renderItem function, which will render each item in the FlatList
+  const renderItem = ({ item }) => (
+    <TouchableOpacity onPress={() => navigation.navigate('PostInfo', { post: item })} style={styles.post}>
+      <View style={styles.postHeader}>
+        <Image style={styles.userImage} source={require('../assets/user-image.png')} />
+        <View style={styles.userInfo}>
+          <Text style={styles.userName}>{item.creator}</Text>
+          <Text style={styles.postTitle}>{item.prompt}</Text>
+        </View>
+      </View>
+      <Image style={styles.postImage} source={{uri: item.image}} />
+      <View style={styles.postStats}>
+        <View style={styles.likesContainer}>
+          <View style={styles.iconsCon}>
+            <Ionicons name="heart" size={16} color="white" />
+            <Text style={styles.statsText}>123</Text>
+            <Ionicons name="eye" size={16} color="white" />
+            <Text style={styles.statsText}>545</Text>
+          </View>
+          <Text style={styles.timePosted}>2 hours ago</Text>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+
+  // Replace the ScrollView with a FlatList
   return (
     <View style={styles.container}>
       <View style={styles.navHeader}>
-        {/* <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="chevron-back-outline" size={25} color='white'/>
-        </TouchableOpacity> */}
         <View style={{ flex: 1, alignItems: 'center' }}>
           <Image style={styles.logo} source={require('../assets/logo.png')} />
         </View>
       </View>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <View style={styles.content}>
-          <TouchableOpacity onPress={handlePostPress} style={styles.post}>
-            <View style={styles.postHeader}>
-              <Image style={styles.userImage} source={require('../assets/user-image.png')} />
-              <View style={styles.userInfo}>
-                <Text style={styles.userName}>xviovx</Text>
-                <Text style={styles.postTitle}>Impressionist piece generated with Midjourney</Text>
-              </View>
-            </View>
-            <Image style={styles.postImage} source={require('../assets/imageMisty.png')} />
-            <View style={styles.postStats}>
-              <View style={styles.likesContainer}>
-                <View style={styles.iconsCon}>
-                  <Ionicons name="heart" size={16} color="white" />
-                  <Text style={styles.statsText}>123</Text>
-                  <Ionicons name="eye" size={16} color="white" />
-                  <Text style={styles.statsText}>545</Text>
-                </View>
-                <Text style={styles.timePosted}>2 hours ago</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-      {/* <View style={styles.navBarContainer}>
-        <NavBar />
-      </View> */}
+      <FlatList
+        data={feedPosts} 
+        renderItem={renderItem} 
+        keyExtractor={(item, index) => index.toString()} 
+      />
     </View>
   )
 }
