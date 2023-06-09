@@ -12,6 +12,8 @@ const Tab = createBottomTabNavigator();
 
 const HomeScreen = ({navigation}) => {
 
+  const user = getCurrentUser()
+
   const [feedPosts, setFeedPosts] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -74,8 +76,8 @@ const getAllImpPosts = async () => {
           <View style={styles.iconsCon}>
             <Ionicons name="heart" size={16} color="white" />
             <Text style={styles.statsText}>123</Text>
-            <Ionicons name="eye" size={16} color="white" />
-            <Text style={styles.statsText}>545</Text>
+            {/* <Ionicons name="eye" size={16} color="white" />
+            <Text style={styles.statsText}>545</Text> */}
           </View>
           <Text style={styles.timePosted}>2 hours ago</Text>
         </View>
@@ -91,6 +93,11 @@ const getAllImpPosts = async () => {
           <Image style={styles.logo} source={require('../assets/logo.png')} />
         </View>
       </View>
+      {feedPosts.length === 0 &&
+        <View style={styles.textHold}>
+          <Text style={styles.comp}>Welcome, {user.displayName}!</Text>
+          <Text style={styles.compTwo}>Add a new competition to your feed to see the latest posts here!</Text>
+        </View>}
       <FlatList
         data={feedPosts} 
         renderItem={renderItem} 
@@ -142,7 +149,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 20,
     marginBottom: 20,
-    marginTop: 20,
+    marginTop: 40,
     fontWeight: 'bold',
     letterSpacing: 3,
   },
@@ -150,6 +157,10 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     marginBottom: 10,
+    marginLeft: 50,
+    marginRight: 50,
+    lineHeight: 25,
+    textAlign: 'center'
   },
   content: {
     flex: 1,
@@ -237,6 +248,7 @@ const styles = StyleSheet.create({
   iconsCon: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginLeft: 5
   },
   
   timePosted: {

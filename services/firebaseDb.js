@@ -64,3 +64,31 @@ export const deletePostFromCollection = async (postId) => {
     }
 }
 
+export const likePost = async (postId) => {
+    try {
+        const postRef = doc(db, "posts", postId);
+        await updateDoc(postRef, {
+            likes: FieldValue.increment(1)
+        });
+        console.log("user liked a post")
+        return true;
+    } catch (e) {
+        console.log("Something went wrong liking a post: " + e)
+        return false;
+    }
+}
+
+export const removeLikeFromPost = async (postId) => {
+    try {
+        const postRef = doc(db, "posts", postId);
+        await updateDoc(postRef, {
+            likes: FieldValue.increment(-1)
+        });
+        console.log("User unliked a post")
+        return true;
+    } catch (e) {
+        console.log("Something went wrong unliking a post: " + e)
+        return false;
+    }
+}
+

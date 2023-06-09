@@ -14,6 +14,7 @@ const PostInfo = ({navigation, route}) => {
   const [category, setCategory] = useState('');
   const [generator, setGenerator] = useState('');
   const [prompt, setPrompt] = useState('');
+  const [liked, setLiked] = useState('');
 
   const imagePath = '../assets/imageMisty.png';
 
@@ -42,6 +43,11 @@ const PostInfo = ({navigation, route}) => {
 
   }
 
+  const likePost = () => {
+    setLiked(prevLiked => !prevLiked);
+    // You may also want to add code here to update your database
+  };  
+
   return (
     <View style={styles.container}>
       <View style={styles.navHeader}>
@@ -65,11 +71,25 @@ const PostInfo = ({navigation, route}) => {
             </Text>
           </TouchableOpacity>
         </View>
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 25 }}>
+    <Ionicons name="heart" size={16} color="white" />
+    <Text style={[styles.headings, { fontWeight: 'bold', marginLeft: 5 }]}>{post.likes}<Text style={{fontWeight: 'normal'}}> Likes</Text></Text>
+</View>
+
         {getCurrentUser().uid == post.userId ? (
           <TouchableOpacity style={styles.deleteButton} onPress={deletePost}>
             <Text style={styles.deleteButtonText}>Delete</Text>
           </TouchableOpacity>
         ) : null}
+        {getCurrentUser().uid !== post.userId ? (
+  <TouchableOpacity 
+    style={liked ? styles.likedButton : styles.likeButton} 
+    onPress={likePost}
+  >
+    <Text style={styles.likeButtonText}>{liked ? 'Unlike' : 'Like'}</Text>
+  </TouchableOpacity>
+) : null}
+
         <Modal
         animationType="slide"
         transparent={true}
@@ -122,7 +142,25 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textDecorationLine: 'underline',
       },
-      
+      likeButton: {
+        marginTop: 130,
+        backgroundColor: 'blue',
+        padding: 15,
+        borderRadius: 10,
+        width: '100%'
+      },
+      likeButtonText: {
+        color: 'white',
+        textAlign: 'center',
+        fontSize: 20,
+      },
+      likedButton: {
+        marginTop: 130,
+        backgroundColor: '#7000FF',
+        padding: 15,
+        borderRadius: 10,
+        width: '100%'
+      },      
   container: {
     height: '100%',
     backgroundColor: '#131312',
