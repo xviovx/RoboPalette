@@ -33,7 +33,8 @@ const createPost = async() => {
       creator: creatorInfo.displayName,
       userId: creatorInfo.uid,
       date: serverTimestamp(), 
-      likes: 0
+      likes: 0,
+      likedBy: []
     }
 
     const success = await addPostToCollection(post)

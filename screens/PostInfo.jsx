@@ -1,52 +1,79 @@
 import { View, Text, StyleSheet, SafeAreaView, ScrollView, Image, TouchableOpacity, FlatList, Alert, ActivityIndicator, ImageBackground, TextInput, useRoute, Modal, Button } from 'react-native';
 import NavBar from '../components/NavBar';
-import React, { useState } from 'react'
-import * as ImagePicker from 'expo-image-picker';
+import React, { useState, useEffect } from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { getCurrentUser } from '../services/firebaseAuth';
-import { deletePostFromCollection } from '../services/firebaseDb';
+import { deletePostFromCollection, removeLikeFromPost } from '../services/firebaseDb';
+import { likePost } from '../services/firebaseDb';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 
 const PostInfo = ({navigation, route}) => {
 
   const [image, setImage] = useState(null);
   const [title, setTitle] = useState('the temp title');
   const [category, setCategory] = useState('');
-  const [generator, setGenerator] = useState('');
+  const [generator, setGenerator] = useState(''); 
   const [prompt, setPrompt] = useState('');
-  const [liked, setLiked] = useState('');
+  const [liked, setLiked] = useState(false);
 
-  const imagePath = '../assets/imageMisty.png';
+  const [modalVisible, setModalVisible] = useState(false);
 
-  const [modalVisible, setModalVisible] = useState(false); // State to control the visibility of the modal
-
-  // Access the post object from route.params
   const { post } = route.params;
 
+  //handle deleting functionality
+
   const deletePost = () => {
-    // Open the modal when deletePost is called
     setModalVisible(true);
   }
 
   const handleDeleteConfirm = async () => {
     const result = await deletePostFromCollection(post.id);
     if(result) {
-        // Navigate back or to another screen after successful deletion
         navigation.goBack();
         setModalVisible(false);
     } else {
-        // Handle error here
+
     }
 }
 
   const handleDeleteCancel = () => {
-
+    setModalVisible(false);
   }
 
-  const likePost = () => {
-    setLiked(prevLiked => !prevLiked);
-    // You may also want to add code here to update your database
-  };  
+  //handle liking functionality
+
+  const userId = getCurrentUser().uid; 
+
+  useEffect(() => {
+    const fetchLikeStatus = async () => {
+      const likesRef = doc(db, "likes", `${userId}_${post.id}`);
+      const likeSnapshot = await getDoc(likesRef);
+      if (likeSnapshot.exists()) {
+        setLiked(true);
+      } else {
+        setLiked(false);
+      }
+    };
+
+    fetchLikeStatus();
+  }, [post.id]);
+
+  const handleLikePost = async () => {
+    if (liked) {
+      const result = await removeLikeFromPost(userId, post.id);
+      if (result) {
+        setLiked(false);
+      }
+    } else {
+      const result = await likePost(userId, post.id); 
+      if (result) {
+        setLiked(true);
+      }
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -84,7 +111,7 @@ const PostInfo = ({navigation, route}) => {
         {getCurrentUser().uid !== post.userId ? (
   <TouchableOpacity 
     style={liked ? styles.likedButton : styles.likeButton} 
-    onPress={likePost}
+    onPress={handleLikePost}
   >
     <Text style={styles.likeButtonText}>{liked ? 'Unlike' : 'Like'}</Text>
   </TouchableOpacity>

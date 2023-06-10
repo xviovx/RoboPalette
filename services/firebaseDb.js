@@ -1,6 +1,8 @@
-import { Timestamp, addDoc, deleteDoc, doc, getDoc, getDocs, orderBy, query, setDoc } from "firebase/firestore"
+import { FieldValue, Timestamp, addDoc, arrayUnion, deleteDoc, getDoc, getDocs, orderBy, query, setDoc, arrayRemove, increment } from "firebase/firestore"
 import { collection} from "firebase/firestore";
 import { db } from "../firebase";
+import { updateDoc } from "firebase/firestore";
+import { doc } from "firebase/firestore";
 
 //USER COLLECTION
 export const createUserInDb = async(username, email, uid) => {
@@ -64,31 +66,39 @@ export const deletePostFromCollection = async (postId) => {
     }
 }
 
-export const likePost = async (postId) => {
+export const likePost = async (userId, postId) => {
     try {
         const postRef = doc(db, "posts", postId);
-        await updateDoc(postRef, {
-            likes: FieldValue.increment(1)
-        });
-        console.log("user liked a post")
+        const likesRef = doc(db, "likes", `${userId}_${postId}`);
+
+        await updateDoc(postRef, { likes: increment(1) });  
+        await setDoc(likesRef, { userId, postId });
+
+        console.log("User liked a post");
         return true;
     } catch (e) {
         console.log("Something went wrong liking a post: " + e)
+        console.error(e); 
         return false;
     }
 }
 
-export const removeLikeFromPost = async (postId) => {
+export const removeLikeFromPost = async (userId, postId) => {
     try {
         const postRef = doc(db, "posts", postId);
-        await updateDoc(postRef, {
-            likes: FieldValue.increment(-1)
-        });
-        console.log("User unliked a post")
+        const likesRef = doc(db, "likes", `${userId}_${postId}`);
+
+        await updateDoc(postRef, { likes: increment(-1) });  
+        await deleteDoc(likesRef);
+
+        console.log("User unliked a post");
         return true;
     } catch (e) {
         console.log("Something went wrong unliking a post: " + e)
+        console.error(e); 
         return false;
     }
 }
+
+
 
