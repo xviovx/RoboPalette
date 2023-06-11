@@ -1,18 +1,47 @@
-import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, FlatList } from 'react-native';
-import React from 'react';
+import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, FlatList, RefreshControl } from 'react-native';
+import React, { useState } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
-const images = [
-  require('../../assets/image1.png'),
-  require('../../assets/image2.png'),
-  require('../../assets/image3.png'),
-];
+import { getAllPostsFromCollection } from '../../services/firebaseDb';
+import { getCurrentUser } from '../../services/firebaseAuth';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Minimalism = ({navigation}) => {
+
+  const [minPosts, setMinPosts] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const [buttonColor, setButtonColor] = useState('#007AFF');
+
+  const [addToFeedButtonText, setAddToFeedButtonText] = useState('ADD TO FEED');
+
+  const userId = getCurrentUser().uid;
 
   const enterCompetition = () => {
     navigation.navigate('Enter', {category: "Minimalism"})
   }
+
+  const getAllMinPosts = async () => {
+    setRefreshing(true)
+    const allPosts = await getAllPostsFromCollection();
+    const minPosts = allPosts.filter(post => post.category === "Minimalism");
+    setRefreshing(false)
+    return minPosts;
+}
+
+useFocusEffect(
+  React.useCallback(() => {
+    const fetchPosts = async () => {
+      const posts = await getAllMinPosts();
+      setMinPosts(posts);
+    };
+
+    fetchPosts();
+
+    // Return a cleanup function 
+    return () => {
+      //clean when not viewing the screen
+    };
+  }, [])
+);
 
   return (
     <View style={styles.container}>
@@ -38,22 +67,25 @@ const Minimalism = ({navigation}) => {
           </TouchableOpacity>
         </View>
         <FlatList
-          style={{ alignSelf: 'center', marginTop: 20 }}
-          contentContainerStyle={{ alignItems: '' }}
-          numColumns={3}
-          data={images}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item, index }) => (
-            <TouchableOpacity onPress={() => handleImagePress(item)}>
-              <View style={{ margin: 5, justifyContent: index % 3 === 0 ? 'flex-start' : (index % 3 === 2 ? 'flex-end' : 'center') }}>
-                <Image
-                  source={item}
-                  style={{ width: 120, height: 120, borderRadius: 10 }}
-                />
-              </View>
-            </TouchableOpacity>
-          )}
+  style={{ alignSelf: 'center', marginTop: 20 }}
+  contentContainerStyle={{ alignItems: '' }}
+  numColumns={3}
+  data={minPosts}
+  keyExtractor={(item, index) => index.toString()}
+  renderItem={({ item, index }) => (
+    <TouchableOpacity onPress={() => navigation.navigate('PostInfo', { post: item })}>
+      <View style={{ margin: 5, justifyContent: index % 3 === 0 ? 'flex-start' : (index % 3 === 2 ? 'flex-end' : 'center') }}>
+        <Image
+          source={{ uri: item.image }}
+          style={{ width: 120, height: 120, borderRadius: 10 }}
         />
+      </View>
+    </TouchableOpacity>
+  )}
+  refreshControl={
+    <RefreshControl refreshing={refreshing} onRefresh={getAllMinPosts} />
+  }
+/>
       </View>
       {/* <View style={styles.navBarContainer}>
         <NavBar />
