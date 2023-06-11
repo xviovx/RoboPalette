@@ -19,7 +19,7 @@ const Impressionism = ({navigation}) => {
   useEffect(() => {
     (async () => {
       try {
-        const value = await AsyncStorage.getItem('@addToFeed:' + userId);
+        const value = await AsyncStorage.getItem('@addToFeed:Impressionism:' + userId);
         if(value !== null) {
           setAddToFeedButtonText(value);
           setButtonColor('#7000FF');
@@ -29,23 +29,23 @@ const Impressionism = ({navigation}) => {
       }
     })();
   }, []);
-
+  
   const addToFeed = async () => {
     try {
       if (addToFeedButtonText === 'ADD TO FEED') {
-        await AsyncStorage.setItem('@addToFeed:' + userId, 'ADDED');
-        await AsyncStorage.setItem('@FeedPosts:' + userId, JSON.stringify(impPosts));
+        await AsyncStorage.setItem('@addToFeed:Impressionism:' + userId, 'ADDED');
+        await AsyncStorage.setItem('@FeedPosts:Impressionism:' + userId, JSON.stringify(impPosts));
         setAddToFeedButtonText('ADDED');
         setButtonColor('#7000FF');
       } else {
-        await AsyncStorage.removeItem('@addToFeed:' + userId);
+        await AsyncStorage.removeItem('@addToFeed:Impressionism:' + userId);
         setAddToFeedButtonText('ADD TO FEED');
         setButtonColor('#007AFF');
       }
     } catch(e) {
       // save error
     }
-  }
+  }  
 
   const enterCompetition = () => {
     navigation.navigate('Enter',{ category: 'Impressionism' })
@@ -61,23 +61,12 @@ const Impressionism = ({navigation}) => {
   
       fetchPosts();
   
-      // Return a cleanup function to be called when the component is unmounted or unfocused.
+      // cleanup function :)
       return () => {
         //clean when not viewing the screen
       };
     }, [])
   );
-  
-
-  //doesn't do that lol
-//   useEffect(() => {
-//     const fetchPosts = async () => {
-//         const posts = await getAllImpPosts();
-//         setImpPost(posts);
-//     }
-
-//     fetchPosts();
-// }, []);
 
   const getAllImpPosts = async () => {
     setRefreshing(true)
@@ -110,11 +99,6 @@ const Impressionism = ({navigation}) => {
             <Text style={[styles.buttonText, { color: 'white' }]}>{addToFeedButtonText}</Text>
           </TouchableOpacity>
         </View>
-        {/* {impPosts.map((post, index) => (
-  <TouchableOpacity key={index} onPress={() => navigation.navigate('PostInfo', { post })}>
-    <Text style={{ fontSize: 30, color: 'white' }}>{post.title}</Text>
-  </TouchableOpacity>
-))} */}
 
 <FlatList
   style={{ alignSelf: 'center', marginTop: 20 }}

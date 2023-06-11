@@ -1,9 +1,10 @@
 import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, FlatList, RefreshControl } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getAllPostsFromCollection } from '../../services/firebaseDb';
 import { getCurrentUser } from '../../services/firebaseAuth';
 import { useFocusEffect } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Minimalism = ({navigation}) => {
 
@@ -43,6 +44,37 @@ useFocusEffect(
   }, [])
 );
 
+useEffect(() => {
+  (async () => {
+    try {
+      const value = await AsyncStorage.getItem('@addToFeed:Minimalism:' + userId);
+      if(value !== null) {
+        setAddToFeedButtonText(value);
+        setButtonColor('#7000FF');
+      }
+    } catch(e) {
+      // error reading value
+    }
+  })();
+}, []);
+
+const addToFeed = async () => {
+  try {
+    if (addToFeedButtonText === 'ADD TO FEED') {
+      await AsyncStorage.setItem('@addToFeed:Minimalism:' + userId, 'ADDED');
+      await AsyncStorage.setItem('@FeedPosts:Minimalism:' + userId, JSON.stringify(minPosts));
+      setAddToFeedButtonText('ADDED');
+      setButtonColor('#7000FF');
+    } else {
+      await AsyncStorage.removeItem('@addToFeed:Minimalism:' + userId);
+      setAddToFeedButtonText('ADD TO FEED');
+      setButtonColor('#007AFF');
+    }
+  } catch(e) {
+    // save error
+  }
+}
+
   return (
     <View style={styles.container}>
       <View style={styles.navHeader}>
@@ -62,8 +94,8 @@ useFocusEffect(
           <TouchableOpacity style={[styles.button, { backgroundColor: '#007AFF' }]} onPress={() => enterCompetition()}>
             <Text style={[styles.buttonText, { color: 'white' }]}>ENTER NOW</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, { backgroundColor: '#007AFF', marginLeft: 20 }]} onPress={() => addToFeed()}>
-            <Text style={[styles.buttonText, { color: 'white' }]}>ADD TO FEED</Text>
+          <TouchableOpacity style={[styles.button, { backgroundColor: buttonColor, marginLeft: 20 }]} onPress={addToFeed}>
+            <Text style={[styles.buttonText, { color: 'white' }]}>{addToFeedButtonText}</Text>
           </TouchableOpacity>
         </View>
         <FlatList

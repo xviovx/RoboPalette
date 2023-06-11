@@ -32,7 +32,7 @@ export const addPostToCollection = async (post) => {
         console.log("something fucked out: " + e)
     }
 }
-//03:22:33 -> no index created for query error
+
 export const getAllPostsFromCollection = async () => {
     try {
         var posts = []
@@ -41,7 +41,7 @@ export const getAllPostsFromCollection = async () => {
 
         snapshot.forEach((doc) => {
             let postData = doc.data();
-            postData.id = doc.id; // Add the document ID to the post data
+            postData.id = doc.id; 
             console.log(doc.id, "=>", postData)
 
             posts.push(postData)

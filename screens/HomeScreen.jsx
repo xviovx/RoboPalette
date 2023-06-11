@@ -12,26 +12,52 @@ const Tab = createBottomTabNavigator();
 
 const HomeScreen = ({navigation}) => {
 
-  const user = getCurrentUser()
+  const userId = getCurrentUser().uid;
 
   const [feedPosts, setFeedPosts] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
+  const getAllPostsForCategory = async (category) => {
+    const userId = getCurrentUser().uid;
+    const addToFeed = await AsyncStorage.getItem('@addToFeed:' + category + ':' + userId);
+    if (addToFeed === 'ADDED') {
+      setRefreshing(true)
+      const allPosts = await getAllPostsFromCollection();
+      const feedPosts = allPosts.filter(post => post.category === category);
+      setRefreshing(false)
+      return feedPosts;
+    } else {
+      return [];
+    }
+  }
+
   useFocusEffect(
     React.useCallback(() => {
       const fetchPosts = async () => {
-        const posts = await getAllImpPosts();
-        setFeedPosts(posts);
+        let allFeedPosts = [];
+      
+        const categories = ["Minimalism", "Impressionism"];
+  
+        for (let category of categories) {
+          const feedState = await AsyncStorage.getItem('@addToFeed:' + category + ':' + userId);
+          if (feedState === 'ADDED') {
+            const categoryPosts = await getAllPostsForCategory(category);
+            allFeedPosts = [...allFeedPosts, ...categoryPosts];
+          }
+        }
+        
+        setFeedPosts(allFeedPosts);
       };
   
       fetchPosts();
   
-      // Return a cleanup function to be called when the component is unmounted or unfocused.
+
       return () => {
         //clean when not viewing the screen
       };
     }, [])
   );
+  
   
 
   //doesn't do that lol
@@ -44,23 +70,23 @@ const HomeScreen = ({navigation}) => {
 //     fetchPosts();
 // }, []);
 
-const getAllImpPosts = async () => {
-  const userId = getCurrentUser().uid;
-  // Check if the "Add to Feed" button has been selected
-  const addToFeed = await AsyncStorage.getItem('@addToFeed:' + userId);
-  if (addToFeed === 'ADDED') {
-    setRefreshing(true)
-    const allPosts = await getAllPostsFromCollection();
-    const feedPosts = allPosts.filter(post => post.category === "Impressionism");
-    setRefreshing(false)
-    return feedPosts;
-  } else {
-    // If the "Add to Feed" button has not been selected, return an empty array
-    return [];
-  }
-}
+//function to get impressionism posts that have been added to the feed
+// const getAllImpPosts = async () => {
+//   const userId = getCurrentUser().uid;
+//   // Check if the "Add to Feed" button has been selected
+//   const addToFeed = await AsyncStorage.getItem('@addToFeed:Impressionism' + userId);
+//   if (addToFeed === 'ADDED') {
+//     setRefreshing(true)
+//     const allPosts = await getAllPostsFromCollection();
+//     const feedPosts = allPosts.filter(post => post.category === "Impressionism");
+//     setRefreshing(false)
+//     return feedPosts;
+//   } else {
+//     //return empty array if "add to feed button" hasn't be selected
+//     return [];
+//   }
+// }
 
-  // This is the new renderItem function, which will render each item in the FlatList
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => navigation.navigate('PostInfo', { post: item })} style={styles.post}>
       <View style={styles.postHeader}>
