@@ -1,27 +1,34 @@
 import { View, Text, StyleSheet, SafeAreaView, ScrollView, Image, TouchableOpacity, FlatList } from 'react-native';
 import NavBar from '../components/NavBar';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getCurrentUser, signOutUser } from '../services/firebaseAuth';
+import { getUserDocument } from '../services/firebaseDb'; // Corrected import
 
 const ProfileScreen = ({navigation}) => {
 
-  // const handleLogout = () => {
-  //   // Perform logout actions here
-  //   // For example, clear user session, navigate to login screen, etc.
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const authUser = getCurrentUser();
+      if (authUser !== null) {
+        const userData = await getUserDocument(authUser.uid);
+        setUser(userData);
+      }
+    };
+    fetchUser();
+  });  
+
+  // const handleEditProfile = () => {
+  //   navigation.navigate('EditProfile');
   // };
-
-  const user = getCurrentUser()
-
-  const handleEditProfile = () => {
-    navigation.navigate('EditProfile'); // Replace 'EditProfile' with your actual screen name
-  };
 
   return (
     <View style={styles.container}>
       <View style={styles.navHeader}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="chevron-back-outline" size={25} color='white'/>
+          <Ionicons name="chevron-back-outline" size={25} color='black'/>
         </TouchableOpacity>
         <View style={{ flex: 1, alignItems: 'center' }}>
           <Image style={styles.logo} source={require('../assets/logo.png')} />
@@ -30,31 +37,28 @@ const ProfileScreen = ({navigation}) => {
      
       <View style={styles.content}>
         <View style={styles.userImage}>
-          <Image source={require('../assets/user-image.png')} style={styles.userImageStyle}/>
+        <Image source={user && user.image ? { uri: user.image } : require('../assets/user-image.png')} style={styles.userImageStyle}/>
         </View>
-        <TouchableOpacity style={styles.editButton} onPress={handleEditProfile}>
+        {/* <TouchableOpacity style={styles.editButton} onPress={handleEditProfile}>
             <Ionicons name="create-outline" size={25} color="black" />
-          </TouchableOpacity>
-        <Text style={styles.userName}>{user.displayName}</Text>
-        <Text style={styles.location}>South Africa</Text>
-        <Text style={styles.description}>certified proompter 🥸🧑🏻‍💻</Text>
+          </TouchableOpacity> */}
+        <Text style={styles.userName}>{user && user.username}</Text>
+        <Text style={styles.location}>{user && user.location}</Text>
+        <Text style={styles.description}>{user && user.about}</Text>
         <View style={styles.linkBreak}></View>
-        <Text style={styles.competitionsNumber}>2</Text>
-        <Text style={styles.competitionsText}>competitions entered</Text>
+        <Text style={styles.competitionsNumber}>{user && user.posts}</Text>
+        <Text style={styles.competitionsText}>posts</Text>
       </View>
 
       <TouchableOpacity style={styles.logoutButton} onPress={signOutUser}>
         <Ionicons name="exit-outline" size={25} color="white" />
       </TouchableOpacity>
-
-      {/* <View style={styles.navBarContainer}>
-        <NavBar />
-      </View> */}
     </View>
   )
 }
 
 export default ProfileScreen
+
 
 const styles = StyleSheet.create({
   container: {

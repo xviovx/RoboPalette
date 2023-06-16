@@ -3,7 +3,8 @@ import { auth } from "../firebase";
 import { Alert } from "react-native";
 import { createUserInDb } from "./firebaseDb";
 
-export const registerNewUser = (username, email, password,) => {
+export const registerNewUser = (userDetails) => {
+    const { username, email, password, image, about, location } = userDetails;
     createUserWithEmailAndPassword(auth, email, password)
     .then(async(userCredential) => {
         const user = userCredential.user;
@@ -11,7 +12,7 @@ export const registerNewUser = (username, email, password,) => {
 
         updateAuthProfile(username)
         
-        await createUserInDb(username, email, user.uid)
+        await createUserInDb(username, email, user.uid, image, about, location)
 
     })
     .catch((error) => {

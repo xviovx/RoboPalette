@@ -10,30 +10,36 @@ const RegisterScreen = ( {navigation} ) => {
 
     const [loading, setLoading] = useState(false)
 
-    const registerUser = () => {
-        console.log("registering.....")
-        registerNewUser(username, email, password)
-    }
+    // const registerUser = () => {
+    //     console.log("registering.....")
+    //     registerNewUser(username, email, password)
+    // }
 
     const registerLoad = () => {
-        setLoading(true)
-        if(!email || !password || !username) {
-            Alert.alert("try again", "please fill in all your details", [
-                {text: 'try again', onPress: () => { setLoading(false) }}
-            ])
-        } else {
-            
-            Alert.alert("You're in!", "Successfully created account", [
-                {text: 'Ok', onPress: () => {
-                    setLoading(false)
-                }}
-            ])
+        if(email && password && username) {
+            setLoading(true);
         }
     }
-
-    // const signUpContinue = () => {
-    //     navigation.navigate('Configure')
-    // }
+    
+    const validateEmail = (email) => {
+        const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
+    }
+    
+    const signUpContinue = () => {
+        if(!email || !password || !username) {
+            Alert.alert("Try again", "Please fill in all your details", [
+                {text: 'Try again', onPress: () => { setLoading(false) }}
+            ]);
+        } else if (!validateEmail(email)) {
+            Alert.alert("Invalid Email", "Please enter a valid email address", [
+                {text: 'Ok', onPress: () => { setLoading(false) }}
+            ]);
+        } else {
+            setLoading(false);
+            navigation.navigate('Configure', { username, email, password });
+        }
+    }      
 
   return (
     <ImageBackground source={require('../assets/log_bg.png')} style={styles.background}>
@@ -71,6 +77,19 @@ const RegisterScreen = ( {navigation} ) => {
       
     { !loading ? (
         <View>
+            <TouchableOpacity style={styles.submitButton} onPress={() => { signUpContinue(username, email, password); registerLoad();}}>
+    <View style={styles.buttonContent}>
+        <Text style={styles.submitButtonText}>CONTINUE</Text>
+     </View>
+</TouchableOpacity>
+
+            <Button onPress={() => navigation.navigate('Login')} title="or SIGN IN" color={'white'} titleStyle={styles.buttonTitle}/>
+
+        </View>
+    ) : <ActivityIndicator animating={loading} size={40}/> }
+
+{/* { !loading ? (
+        <View>
             <TouchableOpacity style={styles.submitButton} onPress={() => { registerLoad(); registerUser(); }}>
                 <View style={styles.buttonContent}>
                     <Text style={styles.submitButtonText}>CONTINUE</Text>
@@ -80,7 +99,7 @@ const RegisterScreen = ( {navigation} ) => {
             <Button onPress={() => navigation.navigate('Login')} title="or SIGN IN" color={'white'} titleStyle={styles.buttonTitle}/>
 
         </View>
-    ) : <ActivityIndicator animating={loading} size={40}/> }
+    ) : <ActivityIndicator animating={loading} size={40}/> } */}
 
     </View>
     </ImageBackground>

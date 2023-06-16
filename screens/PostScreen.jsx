@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import * as ImagePicker from 'expo-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getCurrentUser } from '../services/firebaseAuth';
-import { addPostToCollection } from '../services/firebaseDb';
+import { addPostToCollection, incrementUserPosts } from '../services/firebaseDb';
 import { serverTimestamp } from 'firebase/firestore';
 
 const PostScreen = ({navigation, route}) => {
@@ -18,39 +18,49 @@ const PostScreen = ({navigation, route}) => {
 
   const [uploadButtonText, setUploadButtonText] = useState('Upload Image');
 
-const createPost = async() => {
-  setLoading(true)
-
-  if(title && category && generator && prompt){
-    var creatorInfo = getCurrentUser()
-
-    var post = {
-      image,
-      title,
-      category,
-      generator,
-      prompt,
-      creator: creatorInfo.displayName,
-      userId: creatorInfo.uid,
-      date: serverTimestamp(), 
-      likes: 0,
-      likedBy: []
-    }
-
-    const success = await addPostToCollection(post)
-    if(success){ 
-      Alert.alert("Posted successfully!")
-      setLoading(false)
-      navigation.navigate("Home")
+  const createPost = async () => {
+    setLoading(true);
+  
+    if (title && category && generator && prompt) {
+      var creatorInfo = getCurrentUser();
+  
+      var post = {
+        image,
+        title,
+        category,
+        generator,
+        prompt,
+        creator: creatorInfo.displayName,
+        userId: creatorInfo.uid,
+        date: serverTimestamp(),
+        likes: 0,
+        likedBy: []
+      };
+  
+      const success = await addPostToCollection(post);
+  
+      if (success) {
+        await incrementUserPosts(creatorInfo.uid);
+        Alert.alert("Posted successfully!");
+        setLoading(false);
+  
+        // Reset the form fields to their default state
+        setImage(null);
+        setTitle('');
+        setCategory(route.params?.category || '');
+        setGenerator('');
+        setPrompt('');
+      } else {
+        console.log("Error posting");
+        Alert.alert("Failed to post!", "OK");
+        setLoading(false);
+      }
     } else {
-      console.log("Error posting")
-      Alert.alert("Failed to post!", "OK")
-      setLoading(false)
+      Alert.alert("Woops!", "Please complete all necessary fields");
+      setLoading(false);
     }
-  } else {
-    Alert.alert("Woops!", "Please complete all necessary fields")
-  }
-}
+  };  
+  
 
 const pickImage = async () => {
   let result = await ImagePicker.launchImageLibraryAsync({
@@ -284,6 +294,6 @@ uploadButtonText: {
         color: 'white',
         fontSize: 16,
         textAlign: 'center',
-        textAlignVertical: 'center' // add this line
+        textAlignVertical: 'center' 
       }
 });

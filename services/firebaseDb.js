@@ -5,14 +5,18 @@ import { updateDoc } from "firebase/firestore";
 import { doc } from "firebase/firestore";
 
 //USER COLLECTION
-export const createUserInDb = async(username, email, uid) => {
+export const createUserInDb = async(username, email, uid, image, about, location) => {
     try {
         console.log(uid)
         const docRef = await setDoc(doc(db, "users", uid), {
             username,
             email,
             role: "normal user",
-            createdAt: Timestamp.now()
+            createdAt: Timestamp.now(),
+            image,
+            about,
+            location,
+            posts: 0
         })
     } catch (e) {
         console.log("Something went wrong: " + e)
@@ -100,5 +104,21 @@ export const removeLikeFromPost = async (userId, postId) => {
     }
 }
 
+export const getUserDocument = async (uid) => {
+    const userDoc = await getDoc(doc(db, 'users', uid));
+    if (userDoc.exists) {
+      return userDoc.data();
+    } else {
+      console.log('No such document!');
+      return null;
+    }
+  };
+
+export const incrementUserPosts = async (userId) => {
+    const userRef = doc(db, "users", userId);
+    await updateDoc(userRef, {
+        posts: increment(1)
+    });
+}
 
 
