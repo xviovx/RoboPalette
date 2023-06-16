@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getAllPostsFromCollection } from '../services/firebaseDb';
+import { getAllPostsFromCollection, getUserDocument } from '../services/firebaseDb';
 import { useFocusEffect } from '@react-navigation/native';
 import { getCurrentUser } from '../services/firebaseAuth';
 
@@ -25,19 +25,26 @@ const HomeScreen = ({navigation}) => {
       setRefreshing(true)
       const allPosts = await getAllPostsFromCollection();
       const feedPosts = allPosts.filter(post => post.category === category);
+      
+      // Add user data to each post
+      for (let post of feedPosts) {
+        const userData = await getUserDocument(post.userId);
+        post.user = userData;
+      }
+      
       setRefreshing(false)
       return feedPosts;
     } else {
       return [];
     }
-  }
+  }  
 
   useFocusEffect(
     React.useCallback(() => {
       const fetchPosts = async () => {
         let allFeedPosts = [];
       
-        const categories = ["Minimalism", "Impressionism"];
+        const categories = ["Minimalism", "Impressionism", "Pop Art", "Surrealism", "Realism", "Cubism"];
   
         for (let category of categories) {
           const feedState = await AsyncStorage.getItem('@addToFeed:' + category + ':' + userId);
@@ -59,29 +66,32 @@ const HomeScreen = ({navigation}) => {
     }, [])
   );
 
-  const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => navigation.navigate('PostInfo', { post: item })} style={styles.post}>
-      <View style={styles.postHeader}>
-        <Image style={styles.userImage} source={require('../assets/user-image.png')} />
-        <View style={styles.userInfo}>
-          <Text style={styles.userName}>{item.creator}</Text>
-          <Text style={styles.postTitle}>{item.prompt}</Text>
-        </View>
-      </View>
-      <Image style={styles.postImage} source={{uri: item.image}} />
-      <View style={styles.postStats}>
-        <View style={styles.likesContainer}>
-          <View style={styles.iconsCon}>
-            <Ionicons name="heart" size={16} color="white" />
-            <Text style={styles.statsText}>123</Text>
-            {/* <Ionicons name="eye" size={16} color="white" />
-            <Text style={styles.statsText}>545</Text> */}
+  const renderItem = ({ item }) => {
+    const date = item.date.toDate();
+    const dateString = date.toLocaleString();
+  
+    return (
+      <TouchableOpacity onPress={() => navigation.navigate('PostInfo', { post: item })} style={styles.post}>
+        <View style={styles.postHeader}>
+          <Image style={styles.userImage} source={{uri: item.user.image}} />
+          <View style={styles.userInfo}>
+            <Text style={styles.userName}>{item.creator}</Text>
+            <Text style={styles.postTitle}>{item.prompt}</Text>
           </View>
-          <Text style={styles.timePosted}>2 hours ago</Text>
         </View>
-      </View>
-    </TouchableOpacity>
-  );
+        <Image style={styles.postImage} source={{uri: item.image}} />
+        <View style={styles.postStats}>
+          <View style={styles.likesContainer}>
+            <View style={styles.iconsCon}>
+              <Ionicons name="heart" size={16} color="white" />
+              <Text style={styles.statsText}>{item.likes}</Text>
+            </View>
+            <Text style={styles.timePosted}>{dateString}</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   // Replace the ScrollView with a FlatList
   return (
@@ -102,7 +112,7 @@ const HomeScreen = ({navigation}) => {
         keyExtractor={(item, index) => index.toString()} 
       />
     </View>
-  )
+  );
 }
 
 export default HomeScreen;

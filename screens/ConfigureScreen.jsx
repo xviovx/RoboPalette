@@ -3,6 +3,7 @@ import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity, Image, Ale
 import * as ImagePicker from 'expo-image-picker';
 import { RouteProp } from '@react-navigation/native';
 import { registerNewUser } from '../services/firebaseAuth';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const ConfigureScreen = ({navigation, route}) => {
 
@@ -18,13 +19,21 @@ const ConfigureScreen = ({navigation, route}) => {
 
     const registerUser = async () => {
       console.log("registering.....")
+      setLoading(true);
       try {
-        await registerNewUser({ username, email, password, image, about, location });
-        registerLoad();
+          await registerNewUser({ username, email, password, image, about, location });
+          setLoading(true);
+          Alert.alert("Success", "You have registered successfully", [
+              {text: 'Ok', onPress: () => {setLoading(false)}}
+          ]);
       } catch (error) {
-        console.error("Error registering user: ", error);
+          setLoading(true);
+          console.error("Error registering user: ", error);
+          Alert.alert("Error", "There was an error registering", [
+              {text: 'Ok', onPress: () => {setLoading(false)}}
+          ]);
       }
-    }
+  }  
 
     const registerLoad = () => {
       setLoading(true)
@@ -59,11 +68,24 @@ const ConfigureScreen = ({navigation, route}) => {
         <Image style={styles.logo} source={require("../assets/logo.png")} />
         <Text style={styles.heading}>PERSONALIZE YOUR PROFILE</Text>
 
-        {image && <Image source={{ uri: image }} style={styles.image} />}
+        <View style={styles.imageContainerOuter}>
+  <View style={styles.imageContainer}>
+    {image ? (
+      <Image source={{ uri: image }} style={styles.image} resizeMode='cover' />
+    ) : (
+      <View style={styles.imagePlaceholder}>
+        <Ionicons name="image-outline" size={30} color="white" />
+      </View>
+    )}
+  </View>
+</View>
 
+
+    <View style={styles.uploadContainer}>
         <TouchableOpacity style={styles.uploadButton} onPress={pickImage}>
             <Text style={styles.uploadButtonText}>{uploadButtonText}</Text>
         </TouchableOpacity>
+    </View>
 
         <TextInput 
             style={styles.input}
@@ -109,6 +131,11 @@ export const styles = StyleSheet.create({
   buttonTitle: {
       textDecorationLine: 'underline'
   },
+  imageContainerOuter: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  
   logo: {
       height: 110,
       width: 110,
@@ -125,6 +152,29 @@ export const styles = StyleSheet.create({
       marginBottom: 20,
       marginTop: 10
   },
+  imageContainer: {
+    width: 100,
+    height: 100,
+    borderRadius: 15,
+    overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+imagePlaceholder: {
+    width: 100,
+    height: 80,
+    borderRadius: 15,
+    backgroundColor: '#3B84C5',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 10,
+},
   inputLabel: {
       fontSize: 16,
       marginTop: 15,

@@ -1,19 +1,79 @@
-import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, FlatList } from 'react-native';
-import React from 'react';
+import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, FlatList, RefreshControl } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
-const images = [
-  require('../../assets/image1.png'),
-  require('../../assets/image2.png'),
-  require('../../assets/image3.png'),
-  require('../../assets/image4.png'),
-];
+import { getAllPostsFromCollection } from '../../services/firebaseDb';
+import { getCurrentUser } from '../../services/firebaseAuth';
+import { useFocusEffect } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Surrealism = ({navigation}) => {
+
+  const [surPosts, setSurPosts] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const [buttonColor, setButtonColor] = useState('#007AFF');
+
+  const [addToFeedButtonText, setAddToFeedButtonText] = useState('ADD TO FEED');
+
+  const userId = getCurrentUser().uid;
 
   const enterCompetition = () => {
     navigation.navigate('Enter', {category: "Surrealism"})
   }
+
+  const getAllSurPosts = async () => {
+    setRefreshing(true)
+    const allPosts = await getAllPostsFromCollection();
+    const surPosts = allPosts.filter(post => post.category === "Surrealism");
+    setRefreshing(false)
+    return surPosts;
+}
+
+useFocusEffect(
+  React.useCallback(() => {
+    const fetchPosts = async () => {
+      const posts = await getAllSurPosts();
+      setSurPosts(posts);
+    };
+
+    fetchPosts();
+
+    // Return a cleanup function 
+    return () => {
+      //clean when not viewing the screen
+    };
+  }, [])
+);
+
+useEffect(() => {
+  (async () => {
+    try {
+      const value = await AsyncStorage.getItem('@addToFeed:Surrealism:' + userId);
+      if(value !== null) {
+        setAddToFeedButtonText(value);
+        setButtonColor('#7000FF');
+      }
+    } catch(e) {
+      // error reading value
+    }
+  })();
+}, []);
+
+const addToFeed = async () => {
+  try {
+    if (addToFeedButtonText === 'ADD TO FEED') {
+      await AsyncStorage.setItem('@addToFeed:Surrealism:' + userId, 'ADDED');
+      await AsyncStorage.setItem('@FeedPosts:Surrealism:' + userId, JSON.stringify(surPosts));
+      setAddToFeedButtonText('ADDED');
+      setButtonColor('#7000FF');
+    } else {
+      await AsyncStorage.removeItem('@addToFeed:Surrealism:' + userId);
+      setAddToFeedButtonText('ADD TO FEED');
+      setButtonColor('#007AFF');
+    }
+  } catch(e) {
+    // save error
+  }
+}
 
   return (
     <View style={styles.container}>
@@ -34,27 +94,30 @@ const Surrealism = ({navigation}) => {
           <TouchableOpacity style={[styles.button, { backgroundColor: '#007AFF' }]} onPress={() => enterCompetition()}>
             <Text style={[styles.buttonText, { color: 'white' }]}>ENTER NOW</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, { backgroundColor: '#007AFF', marginLeft: 20 }]} onPress={() => addToFeed()}>
-            <Text style={[styles.buttonText, { color: 'white' }]}>ADD TO FEED</Text>
+          <TouchableOpacity style={[styles.button, { backgroundColor: buttonColor, marginLeft: 20 }]} onPress={addToFeed}>
+            <Text style={[styles.buttonText, { color: 'white' }]}>{addToFeedButtonText}</Text>
           </TouchableOpacity>
         </View>
         <FlatList
-          style={{ alignSelf: 'center', marginTop: 20 }}
-          contentContainerStyle={{ alignItems: '' }}
-          numColumns={3}
-          data={images}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item, index }) => (
-            <TouchableOpacity onPress={() => handleImagePress(item)}>
-              <View style={{ margin: 5, justifyContent: index % 3 === 0 ? 'flex-start' : (index % 3 === 2 ? 'flex-end' : 'center') }}>
-                <Image
-                  source={item}
-                  style={{ width: 120, height: 120, borderRadius: 10 }}
-                />
-              </View>
-            </TouchableOpacity>
-          )}
+  style={{ alignSelf: 'center', marginTop: 20 }}
+  contentContainerStyle={{ alignItems: '' }}
+  numColumns={3}
+  data={surPosts}
+  keyExtractor={(item, index) => index.toString()}
+  renderItem={({ item, index }) => (
+    <TouchableOpacity onPress={() => navigation.navigate('PostInfo', { post: item })}>
+      <View style={{ margin: 5, justifyContent: index % 3 === 0 ? 'flex-start' : (index % 3 === 2 ? 'flex-end' : 'center') }}>
+        <Image
+          source={{ uri: item.image }}
+          style={{ width: 120, height: 120, borderRadius: 10 }}
         />
+      </View>
+    </TouchableOpacity>
+  )}
+  refreshControl={
+    <RefreshControl refreshing={refreshing} onRefresh={getAllSurPosts} />
+  }
+/>
       </View>
       {/* <View style={styles.navBarContainer}>
         <NavBar />
