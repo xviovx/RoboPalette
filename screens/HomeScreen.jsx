@@ -26,7 +26,6 @@ const HomeScreen = ({navigation}) => {
       const allPosts = await getAllPostsFromCollection();
       const feedPosts = allPosts.filter(post => post.category === category);
       
-      // Add user data to each post
       for (let post of feedPosts) {
         const userData = await getUserDocument(post.userId);
         post.user = userData;
@@ -93,7 +92,6 @@ const HomeScreen = ({navigation}) => {
     );
   };
 
-  // Replace the ScrollView with a FlatList
   return (
     <View style={styles.container}>
       <View style={styles.navHeader}>

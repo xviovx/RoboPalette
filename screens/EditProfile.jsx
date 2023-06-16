@@ -96,9 +96,6 @@ const EditProfile = ({navigation}) => {
                     <Text style={styles.submitButtonText}>SAVE CHANGES</Text>
                 </View>
             </TouchableOpacity>
-  {/* <View style={styles.linkBreak}></View>
-  <Text style={styles.competitionsNumber}>2</Text>
-  <Text style={styles.competitionsText}>competitions entered</Text> */}
 </View>
 
 
@@ -251,7 +248,7 @@ submitButtonText: {
     color: 'white',
     fontSize: 16,
     textAlign: 'center',
-    textAlignVertical: 'center' // add this line
+    textAlignVertical: 'center'
   }
   
 });

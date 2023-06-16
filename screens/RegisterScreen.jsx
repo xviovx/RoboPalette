@@ -10,11 +10,6 @@ const RegisterScreen = ( {navigation} ) => {
 
     const [loading, setLoading] = useState(false)
 
-    // const registerUser = () => {
-    //     console.log("registering.....")
-    //     registerNewUser(username, email, password)
-    // }
-
     const registerLoad = () => {
         if(email && password && username) {
             setLoading(true);
@@ -44,7 +39,7 @@ const RegisterScreen = ( {navigation} ) => {
   return (
     <ImageBackground source={require('../assets/log_bg.png')} style={styles.background}>
 
-<View style={styles.container}>
+    <View style={styles.container}>
         <Image style={styles.logo} source={require("../assets/logo.png")} />
       <Text style={styles.heading}>REGISTER</Text>
 
@@ -56,7 +51,7 @@ const RegisterScreen = ( {navigation} ) => {
       defaultValue={username}
       onChangeText={newValue => setUsername(newValue)}/>
 
-      {/* <Text style={styles.inputLabel}>Email</Text> */}
+
       <TextInput 
       style={styles.input}
       keyboardType='email-address'
@@ -65,7 +60,6 @@ const RegisterScreen = ( {navigation} ) => {
       defaultValue={email}
       onChangeText={newValue => setEmail(newValue)}/>
 
-    {/* <Text style={styles.inputLabel}>Password</Text> */}
     <TextInput 
       style={styles.input}
       keyboardType='default'
@@ -87,19 +81,6 @@ const RegisterScreen = ( {navigation} ) => {
 
         </View>
     ) : <ActivityIndicator animating={loading} size={40}/> }
-
-{/* { !loading ? (
-        <View>
-            <TouchableOpacity style={styles.submitButton} onPress={() => { registerLoad(); registerUser(); }}>
-                <View style={styles.buttonContent}>
-                    <Text style={styles.submitButtonText}>CONTINUE</Text>
-                 </View>
-            </TouchableOpacity>
-
-            <Button onPress={() => navigation.navigate('Login')} title="or SIGN IN" color={'white'} titleStyle={styles.buttonTitle}/>
-
-        </View>
-    ) : <ActivityIndicator animating={loading} size={40}/> } */}
 
     </View>
     </ImageBackground>
@@ -170,7 +151,7 @@ export const styles = StyleSheet.create({
         color: 'white',
         fontSize: 16,
         textAlign: 'center',
-        textAlignVertical: 'center' // add this line
+        textAlignVertical: 'center'
       }
       
 })

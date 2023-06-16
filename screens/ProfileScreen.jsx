@@ -3,7 +3,7 @@ import NavBar from '../components/NavBar';
 import React, { useState, useEffect } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getCurrentUser, signOutUser } from '../services/firebaseAuth';
-import { getUserDocument } from '../services/firebaseDb'; // Corrected import
+import { getUserDocument } from '../services/firebaseDb';
 
 const ProfileScreen = ({navigation}) => {
 
@@ -20,10 +20,6 @@ const ProfileScreen = ({navigation}) => {
     fetchUser();
   });  
 
-  // const handleEditProfile = () => {
-  //   navigation.navigate('EditProfile');
-  // };
-
   return (
     <View style={styles.container}>
       <View style={styles.navHeader}>
@@ -39,9 +35,6 @@ const ProfileScreen = ({navigation}) => {
         <View style={styles.userImage}>
         <Image source={user && user.image ? { uri: user.image } : require('../assets/user-image.png')} style={styles.userImageStyle}/>
         </View>
-        {/* <TouchableOpacity style={styles.editButton} onPress={handleEditProfile}>
-            <Ionicons name="create-outline" size={25} color="black" />
-          </TouchableOpacity> */}
         <Text style={styles.userName}>{user && user.username}</Text>
         <Text style={styles.location}>{user && user.location}</Text>
         <Text style={styles.description}>{user && user.about}</Text>
@@ -170,6 +163,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: 'white',
     borderRadius: 5,
-
   },
 });

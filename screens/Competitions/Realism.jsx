@@ -37,9 +37,8 @@ useFocusEffect(
 
     fetchPosts();
 
-    // Return a cleanup function 
     return () => {
-      //clean when not viewing the screen
+      
     };
   }, [])
 );
@@ -53,7 +52,6 @@ useEffect(() => {
         setButtonColor('#7000FF');
       }
     } catch(e) {
-      // error reading value
     }
   })();
 }, []);
@@ -71,7 +69,6 @@ const addToFeed = async () => {
       setButtonColor('#007AFF');
     }
   } catch(e) {
-    // save error
   }
 }
 
@@ -88,7 +85,6 @@ const addToFeed = async () => {
       <View style={styles.content}>
         <View style={styles.textHold}>
           <Text style={styles.comp}>REALISM</Text>
-          {/* <Text style={styles.compTwo}></Text> */}
         </View>
         <View style={styles.buttons}>
           <TouchableOpacity style={[styles.button, { backgroundColor: '#007AFF' }]} onPress={() => enterCompetition()}>
@@ -119,9 +115,6 @@ const addToFeed = async () => {
   }
 />
       </View>
-      {/* <View style={styles.navBarContainer}>
-        <NavBar />
-      </View> */}
     </View>
   )
 }

@@ -56,7 +56,6 @@ const ConfigureScreen = ({navigation, route}) => {
           
         if (!result.canceled && result.assets && result.assets.length > 0) {
             setImage(result.assets[0].uri);
-            // Once image is selected, change the text
             setUploadButtonText('Image selected!');
         }          
     };

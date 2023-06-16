@@ -10,9 +10,8 @@ const LoginScreen = ( {navigation} ) => {
 
     const [loading, setLoading] = useState(false)
 
-    //function that executes when the user tries to log on
     const logLoad = async () => {
-        setLoading(true); // Start loading
+        setLoading(true);
         try {
             if (!email || !password) {
                 Alert.alert("Try again", "Please complete all fields", [
@@ -21,22 +20,19 @@ const LoginScreen = ( {navigation} ) => {
             } else {
                 const signInResult = await signInUser(email, password)
                 if (signInResult && signInResult.error) {
-                    // Sign in failed
+                    
                     Alert.alert("Error", "Failed to sign in. Please check your email and password.", [
                         {text: 'Ok'}
                     ])
                 } else {
-                    // Sign in was successful
-                    // Alert.alert("You're in!", "Signed in successfully!", [
-                    //     {text: 'Ok'}
-                    // ])
+                    
                 }
             }
         } catch (e) {
-            // Handle error during signInUser
+            
             console.log("An error occurred during sign in: ", e);
         } finally {
-            setLoading(false); // Stop loading
+            setLoading(false);
         }
     }         
 
@@ -47,7 +43,6 @@ const LoginScreen = ( {navigation} ) => {
         <Image style={styles.logo} source={require("../assets/logo.png")} />
       <Text style={styles.heading}>LOGIN</Text>
 
-      {/* <Text style={styles.inputLabel}>Email</Text> */}
       <TextInput 
       style={styles.input}
       keyboardType='email-address'
@@ -56,7 +51,6 @@ const LoginScreen = ( {navigation} ) => {
       defaultValue={email}
       onChangeText={newValue => setEmail(newValue)}/>
 
-    {/* <Text style={styles.inputLabel}>Password</Text> */}
     <TextInput 
       style={styles.input}
       keyboardType='default'
@@ -146,7 +140,7 @@ export const styles = StyleSheet.create({
         color: 'white',
         fontSize: 16,
         textAlign: 'center',
-        textAlignVertical: 'center' // add this line
+        textAlignVertical: 'center'
       }
       
 })

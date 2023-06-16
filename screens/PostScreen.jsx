@@ -43,8 +43,6 @@ const PostScreen = ({navigation, route}) => {
         await incrementUserPosts(creatorInfo.uid);
         Alert.alert("Posted successfully!");
         setLoading(false);
-  
-        // Reset the form fields to their default state
         setImage(null);
         setTitle('');
         setCategory(route.params?.category || '');
@@ -72,24 +70,9 @@ const pickImage = async () => {
 
   if (!result.canceled && result.assets && result.assets.length > 0) {
     setImage(result.assets[0].uri);
-    // Once image is selected, change the text
     setUploadButtonText('Image selected!');
   }  
 };
-
-// const submit = () => {
-//   if(!email || !password) {
-//       Alert.alert("try again", "please fill in your email and password", [
-//           {text: 'try again'}
-//       ])
-//   } else {
-      
-//       Alert.alert("You're in!", "Successfully logged in", [
-//           {text: 'Thanks', onPress: () => {
-//           }}
-//       ])
-//   }
-// }
 
   return (
     <View style={styles.container}>
@@ -161,9 +144,6 @@ const pickImage = async () => {
 
         </View>
       </ScrollView>
-      {/* <View style={styles.navBarContainer}>
-        <NavBar />
-      </View> */}
     </View>
   )
 }
