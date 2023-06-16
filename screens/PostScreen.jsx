@@ -97,10 +97,19 @@ const pickImage = async () => {
             <Text style={styles.comp}>ENTER COMPETITION</Text>
           </View>
 
-          <TouchableOpacity style={styles.uploadButton} onPress={pickImage}>
-            <Text style={styles.uploadButtonText}>{uploadButtonText}</Text>
-          </TouchableOpacity>
-          {image && <Image source={{ uri: image }} style={styles.image} />}
+          <View style={styles.uploadContainer}>
+  <TouchableOpacity style={styles.uploadButton} onPress={pickImage}>
+    <Text style={styles.uploadButtonText}>{uploadButtonText}</Text>
+  </TouchableOpacity>
+  {image ? (
+    <Image source={{ uri: image }} style={styles.image} />
+  ) : (
+    <View style={styles.imagePlaceholder}>
+      <Ionicons name="image-outline" size={30} color="white" />
+    </View>
+  )}
+</View>
+
 
           <TextInput 
       style={styles.input}
@@ -159,6 +168,33 @@ const styles = StyleSheet.create({
   },
   headings: {
     color: 'white',
+  },
+  uploadContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between', 
+    alignItems: 'flex-start', 
+    width: '80%',
+  },
+  uploadButton: {
+    flex: 1, 
+    marginRight: 10,
+  },
+  image: {
+    width: 60, 
+    height: 65, 
+    borderRadius: 5, 
+    marginLeft: 10,
+    marginTop: 18
+  },
+  imagePlaceholder: {
+    width: 60, 
+    height: 65, 
+    borderRadius: 5, 
+    marginLeft: 10,
+    backgroundColor: '#3B84C5', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    marginTop: 18
   },
   input: {
     width: '100%',

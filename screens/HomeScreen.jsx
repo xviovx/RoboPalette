@@ -13,6 +13,7 @@ const Tab = createBottomTabNavigator();
 const HomeScreen = ({navigation}) => {
 
   const userId = getCurrentUser().uid;
+  const user = getCurrentUser();
 
   const [feedPosts, setFeedPosts] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -57,35 +58,6 @@ const HomeScreen = ({navigation}) => {
       };
     }, [])
   );
-  
-  
-
-  //doesn't do that lol
-//   useEffect(() => {
-//     const fetchPosts = async () => {
-//         const posts = await getAllImpPosts();
-//         setImpPost(posts);
-//     }
-
-//     fetchPosts();
-// }, []);
-
-//function to get impressionism posts that have been added to the feed
-// const getAllImpPosts = async () => {
-//   const userId = getCurrentUser().uid;
-//   // Check if the "Add to Feed" button has been selected
-//   const addToFeed = await AsyncStorage.getItem('@addToFeed:Impressionism' + userId);
-//   if (addToFeed === 'ADDED') {
-//     setRefreshing(true)
-//     const allPosts = await getAllPostsFromCollection();
-//     const feedPosts = allPosts.filter(post => post.category === "Impressionism");
-//     setRefreshing(false)
-//     return feedPosts;
-//   } else {
-//     //return empty array if "add to feed button" hasn't be selected
-//     return [];
-//   }
-// }
 
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => navigation.navigate('PostInfo', { post: item })} style={styles.post}>
