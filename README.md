@@ -1,7 +1,5 @@
 # RoboPalette
 
-<!-- REPLACE ALL THE [USERNAME] TEXT WITH YOUR GITHUB PROFILE NAME & THE [PROJECTNAME] WITH THE NAME OF YOUR GITHUB PROJECT -->
-
 <!-- Repository Information & Links-->
 <br />
 
@@ -31,7 +29,7 @@
     AI-generated image competition <br>
       <!-- <a href="https://github.com/username/projectname"><strong>Explore the docs »</strong></a> -->
    <br />
-   <a href="https://youtu.be/Gf9k5cLM-po">View Demo</a>
+   <a href="https://youtu.be/Jt3TcsPCClU">View Demo</a>
     ·
     <a href="https://github.com/xviovx/RoboPalette/issues">Report Bug</a>
     ·
