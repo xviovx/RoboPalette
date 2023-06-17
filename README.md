@@ -5,10 +5,10 @@
 <!-- Repository Information & Links-->
 <br />
 
-![GitHub repo size](https://img.shields.io/github/repo-size/xviovx/RoboPalette?color=%000000)
-![GitHub watchers](https://img.shields.io/github/watchers/xviovx/RoboPalette?color=%000000)
-![GitHub language count](https://img.shields.io/github/languages/count/xviovx/RoboPalette?color=%000000)
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/xviovx/RoboPalette?color=%000000)
+![GitHub repo size](https://img.shields.io/github/repo-size/xviovx/RoboPalette?color=%23000000)
+![GitHub watchers](https://img.shields.io/github/watchers/xviovx/RoboPalette?color=%23000000)
+![GitHub language count](https://img.shields.io/github/languages/count/xviovx/RoboPalette?color=%23000000)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/xviovx/RoboPalette?color=%23000000)
 [![Instagram][instagram-shield]](https://www.instagram.com/kay_pharoah/)
 <!-- [![LinkedIn][linkedin-shield]][linkedin-url] -->
 
