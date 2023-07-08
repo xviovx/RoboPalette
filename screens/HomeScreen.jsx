@@ -43,7 +43,7 @@ const HomeScreen = ({navigation}) => {
       const fetchPosts = async () => {
         let allFeedPosts = [];
       
-        const categories = ["Minimalism", "Impressionism", "PopArt", "Surrealism", "Realism", "Cubism"];
+        const categories = ["Minimalism", "Impressionism", "Pop Art", "Surrealism", "Realism", "Cubism"];
   
         for (let category of categories) {
           const feedState = await AsyncStorage.getItem('@addToFeed:' + category + ':' + userId);

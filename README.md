@@ -62,7 +62,8 @@
 <!--PROJECT DESCRIPTION-->
 ## About
 <!-- header image of project -->
-<img src="readMeAssets/aboutImg.png" alt="Logo" width="650" height="350">
+
+![Header image](readMeAssets/aboutImg.png)
 
 ### Description
 
@@ -141,7 +142,9 @@ Follow these steps to get this project running on your machine:
 <!-- You can add the links to all of your imagery at the bottom of the file as references -->
 ## Features and Functionality
 
-<img src="readMeAssets/reg.png" alt="Registration Screens" width="650" height="350">
+<!-- <img src="readMeAssets/reg.png" alt="Registration Screens" width="650" height="350"> -->
+
+![Register Screens](readMeAssets/reg.png)
 <br>
 
 ### Registration
@@ -151,7 +154,7 @@ Follow these steps to get this project running on your machine:
 
 <br>
 
-<img src="readMeAssets/comp.png" alt="Competition enter" width="650" height="350">
+![Competitions](readMeAssets/comp.png)
 <br>
 
 ### Enter competitions!
@@ -161,7 +164,7 @@ Follow these steps to get this project running on your machine:
 
 <br>
 
-<img src="readMeAssets/feed.png" alt="Add to feed" width="650" height="350">
+![Add to feed](readMeAssets/feed.png)
 
 ### Add posts to your feed!
 
@@ -169,7 +172,7 @@ Follow these steps to get this project running on your machine:
 
 <br>
 
-<img src="readMeAssets/like.png" alt="Like posts" width="650" height="350">
+![Like posts](readMeAssets/like.png)
 
 ### Like & view posts!
 
@@ -178,7 +181,7 @@ Follow these steps to get this project running on your machine:
 
 <br>
 
-<img src="readMeAssets/leaderboard.png" alt="leaderboards" width="650" height="350">
+![Leaderboard](readMeAssets/leaderboard.png)
 
 ### View the leaderboard!
 
@@ -186,7 +189,7 @@ Follow these steps to get this project running on your machine:
 
 <br>
 
-<img src="readMeAssets/profile.png" alt="profile" width="650" height="350">
+![Profile](readMeAssets/profile.png)
 
 ### Profile information!
 
@@ -198,7 +201,7 @@ Follow these steps to get this project running on your machine:
 <!-- Briefly explain your concept ideation process -->
 ## Concept Process
 
-<img src="readMeAssets/wireframes.png" alt="wireframes" width="650" height="350">
+![Wireframes](readMeAssets/wireframes.png)
 
 ### High Fidelity Wireframes
 

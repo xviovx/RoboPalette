@@ -47,7 +47,7 @@ useFocusEffect(
 useEffect(() => {
   (async () => {
     try {
-      const value = await AsyncStorage.getItem('@addToFeed:PopArt:' + userId);
+      const value = await AsyncStorage.getItem('@addToFeed:Pop Art:' + userId);
       if(value !== null) {
         setAddToFeedButtonText(value);
         setButtonColor('#7000FF');
@@ -61,12 +61,12 @@ useEffect(() => {
 const addToFeed = async () => {
   try {
     if (addToFeedButtonText === 'ADD TO FEED') {
-      await AsyncStorage.setItem('@addToFeed:PopArt:' + userId, 'ADDED');
-      await AsyncStorage.setItem('@FeedPosts:PopArt:' + userId, JSON.stringify(popPosts));
+      await AsyncStorage.setItem('@addToFeed:Pop Art:' + userId, 'ADDED');
+      await AsyncStorage.setItem('@FeedPosts:Pop Art:' + userId, JSON.stringify(popPosts));
       setAddToFeedButtonText('ADDED');
       setButtonColor('#7000FF');
     } else {
-      await AsyncStorage.removeItem('@addToFeed:PopArt:' + userId);
+      await AsyncStorage.removeItem('@addToFeed:Pop Art:' + userId);
       setAddToFeedButtonText('ADD TO FEED');
       setButtonColor('#007AFF');
     }
