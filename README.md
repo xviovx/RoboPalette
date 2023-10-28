@@ -136,7 +136,6 @@ Follow these steps to get this project running on your machine:
 
     Install any additional dependencies listed in the package.json file
   
-    ```
 
 <!-- FEATURES AND FUNCTIONALITY-->
 <!-- You can add the links to all of your imagery at the bottom of the file as references -->
