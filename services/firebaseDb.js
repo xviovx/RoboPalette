@@ -33,7 +33,7 @@ export const addPostToCollection = async (post) => {
             return false
         }
     } catch(e) {
-        console.log("something fucked out: " + e)
+        console.log("Something went wrong: " + e)
     }
 }
 
